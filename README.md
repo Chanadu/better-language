@@ -1,4 +1,4 @@
 # better-language
 A Programming Language I guess 
 
-https://gobyexample.com/command-line-arguments
+https://craftinginterpreters.com/scanning.html#the-interpreter-framework
