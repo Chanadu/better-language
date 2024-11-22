@@ -18,7 +18,7 @@ func main() {
 			os.Exit(1)
 		}
 	} else { // File Reader
-		if err := FileReader(); err != nil {
+		if err := FileReader(args[0]); err != nil {
 			fmt.Println("Error: ", err)
 			os.Exit(1)
 		}
