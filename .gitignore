@@ -55,4 +55,4 @@ go.work.sum
 *.bpl
 
 # Build Files
-./build/*
+build/*
