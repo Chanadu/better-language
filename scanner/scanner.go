@@ -1,10 +1,11 @@
 package scanner
 
 import (
+	"strconv"
+
 	"Better-Language/scanner/token"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
-	"strconv"
 )
 
 type Scanner interface {
@@ -13,7 +14,7 @@ type Scanner interface {
 	scanSlashToken() (tokentype.TokenType, bool, error)
 	scanStringToken() (interface{}, error)
 	scanNumberToken() (tokentype.TokenType, interface{}, error)
-	scanIdentifierToken() (tokentype.TokenType, interface{}, error)
+	scanIdentifierToken() (tokentype.TokenType, error)
 	isAtEnd(offset int) bool
 	advanceCurrent() rune
 	createToken(tt tokentype.TokenType, literal interface{}) *token.Token
@@ -83,29 +84,49 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 			return &token.Token{}, false, err
 		}
 	case '!':
-		if !sc.match('=') {
-			tt = tokentype.Not
-		} else {
+		if sc.match('=') {
 			tt = tokentype.NotEqual
+		} else {
+			tt = tokentype.Not
 		}
 	case '=':
-		if !sc.match('=') {
-			tt = tokentype.Equal
-		} else {
+		if sc.match('=') {
 			tt = tokentype.EqualEqual
+		} else {
+			tt = tokentype.Equal
 		}
 	case '>':
-		if !sc.match('=') {
-			tt = tokentype.Greater
-		} else {
+		if sc.match('=') {
 			tt = tokentype.GreaterEqual
+		} else if sc.match('>') {
+			tt = tokentype.BitwiseShiftRight
+		} else {
+			tt = tokentype.Greater
 		}
 	case '<':
-		if !sc.match('=') {
-			tt = tokentype.Less
-		} else {
+		if sc.match('=') {
 			tt = tokentype.LessEqual
+		} else if sc.match('<') {
+			tt = tokentype.BitwiseShiftLeft
+		} else {
+			tt = tokentype.Less
 		}
+	case '|':
+		if sc.match('|') {
+			tt = tokentype.Or
+		} else {
+			tt = tokentype.BitwiseOr
+		}
+	case '&':
+		if sc.match('&') {
+			tt = tokentype.And
+		} else {
+			tt = tokentype.BitwiseAnd
+		}
+	case '^':
+		tt = tokentype.BitwiseXor
+	case '~':
+		tt = tokentype.BitwiseNot
 	case ' ', '\r', '\t':
 		shouldAdd = false
 	case '\n':
@@ -119,7 +140,7 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 		if err != nil {
 			return &token.Token{}, false, err
 		}
-	//case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+	// case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 	//	tt = tokentype.Integer
 	default:
 		if utils.IsDigit(r) {
@@ -132,7 +153,7 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 		}
 		if utils.IsAlpha(r) {
 			var err error
-			tt, literal, err = sc.scanIdentifierToken()
+			tt, err = sc.scanIdentifierToken()
 			if err != nil {
 				return &token.Token{}, false, err
 			}
@@ -217,7 +238,7 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal interface{
 	return tt, lit, nil
 }
 
-func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, literal interface{}, e error) {
+func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, e error) {
 	for utils.IsAlpha(sc.peek(0)) || utils.IsDigit(sc.peek(0)) {
 		_ = sc.advanceCurrent()
 	}
@@ -231,5 +252,5 @@ func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, literal interf
 		tt = tokentype.Identifier
 	}
 
-	return tt, literal, nil
+	return tt, nil
 }

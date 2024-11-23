@@ -25,14 +25,27 @@ const (
 
 	// One or Two Character Token
 
-	Not
 	NotEqual
-	Equal
+	Not
 	EqualEqual
-	Greater
+	Equal
+
 	GreaterEqual
-	Less
+	Greater
+	BitwiseShiftRight
+
 	LessEqual
+	Less
+	BitwiseShiftLeft
+
+	Or
+	BitwiseOr
+
+	And
+	BitwiseAnd
+
+	BitwiseXor
+	BitwiseNot
 
 	// Literals
 
@@ -42,9 +55,6 @@ const (
 	Double
 
 	// Keywords
-
-	Or
-	And
 
 	False
 	True
@@ -68,16 +78,14 @@ const (
 
 	// Prolly won't use this stuff
 
-	//Class
-	//This
-	//Super
+	// Class
+	// This
+	// Super
 )
 
 //go:generate stringer -type=TokenType
 
 var KeywordsToTokenType = map[string]TokenType{
-	"or":       Or,
-	"and":      And,
 	"false":    False,
 	"true":     True,
 	"if":       If,
@@ -90,6 +98,6 @@ var KeywordsToTokenType = map[string]TokenType{
 	"print":    Print,
 	"var":      Var,
 	"null":     Null,
-	//"class":    Class,
-	//"this":     This,
+	// "class":    Class,
+	// "this":     This,
 }
