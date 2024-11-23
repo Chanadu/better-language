@@ -3,12 +3,15 @@ package tokentype
 type TokenType int
 
 const (
+	// Base Nil Character
+	Base TokenType = iota
+
 	// Single Character Token
 
-	LeftParentheses TokenType = iota
-	RightParentheses
-	LeftCurlyBrace
-	RightCurlyBrace
+	OpeningParentheses
+	ClosingParentheses
+	OpeningCurlyBrace
+	ClosingCurlyBrace
 
 	Comma
 	Dot
@@ -65,23 +68,28 @@ const (
 
 	// Prolly won't use this stuff
 
-	Class
-	This
-	Super
+	//Class
+	//This
+	//Super
 )
 
 //go:generate stringer -type=TokenType
 
-var RuneToTokenType = map[rune]TokenType{
-	'(': LeftParentheses,
-	')': RightParentheses,
-	'{': LeftCurlyBrace,
-	'}': RightCurlyBrace,
-	',': Comma,
-	'.': Dot,
-	';': Semicolon,
-	'-': Minus,
-	'+': Plus,
-	'*': Star,
-	'%': Percent,
+var KeywordsToTokenType = map[string]TokenType{
+	"or":       Or,
+	"and":      And,
+	"false":    False,
+	"true":     True,
+	"if":       If,
+	"else":     Else,
+	"for":      For,
+	"while":    While,
+	"break":    Break,
+	"return":   Return,
+	"function": Function,
+	"print":    Print,
+	"var":      Var,
+	"null":     Null,
+	//"class":    Class,
+	//"this":     This,
 }

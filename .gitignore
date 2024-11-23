@@ -50,3 +50,9 @@ go.work.sum
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+
+# Test File
+*.bpl
+
+# Build Files
+./build/*

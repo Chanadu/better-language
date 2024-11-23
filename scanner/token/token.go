@@ -1,4 +1,4 @@
-package scanner
+package token
 
 import (
 	"Better-Language/scanner/tokentype"
