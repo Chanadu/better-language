@@ -1,8 +1,9 @@
 package token
 
 import (
-	"Better-Language/scanner/tokentype"
 	"fmt"
+
+	"Better-Language/scanner/tokentype"
 )
 
 type Token struct {

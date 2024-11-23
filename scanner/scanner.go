@@ -193,6 +193,7 @@ func (sc *scanner) scanStringToken() (literal interface{}, e error) {
 		if err != nil {
 			return nil, err
 		}
+		return nil, nil
 	}
 
 	// Moves the current pointer to the closing quote (bc previously peeked)

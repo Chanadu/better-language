@@ -1,11 +1,12 @@
 package main
 
 import (
-	"Better-Language/scanner"
-	"Better-Language/utils"
 	"bufio"
 	"fmt"
 	"os"
+
+	"Better-Language/scanner"
+	"Better-Language/utils"
 )
 
 func LineReader() error {
@@ -13,7 +14,7 @@ func LineReader() error {
 
 	for input.Scan() {
 		line := input.Text()
-		//fmt.Println(line)
+		// fmt.Println(line)
 		if err := run(line); err != nil {
 			return err
 		}
@@ -49,6 +50,6 @@ func run(source string) error {
 		fmt.Println(t)
 	}
 
-	//fmt.Println(source)
+	// fmt.Println(source)
 	return nil
 }
