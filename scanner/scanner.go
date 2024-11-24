@@ -132,7 +132,12 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 	case '\n':
 		sc.lineNumber++
 		// shouldAdd = false
-		tt = tokentype.Semicolon
+		isStatementEnder := sc.scanNewLineToken()
+		if isStatementEnder {
+			tt = tokentype.Semicolon
+		} else {
+			shouldAdd = false
+		}
 	case '"':
 		var err error = nil
 		tt = tokentype.String
@@ -255,4 +260,26 @@ func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, e error) {
 	}
 
 	return tt, nil
+}
+
+func (sc *scanner) scanNewLineToken() (isStatementEnder bool) {
+	prevToken := sc.tokens[len(sc.tokens)-1]
+	switch prevToken.Type {
+	case tokentype.ClosingParentheses,
+		tokentype.ClosingCurlyBrace,
+		tokentype.Identifier,
+		tokentype.String,
+		tokentype.Integer,
+		tokentype.Double,
+		tokentype.True,
+		tokentype.False,
+		tokentype.Break,
+		tokentype.Return,
+		tokentype.Null:
+
+		isStatementEnder = true
+	default:
+		isStatementEnder = false
+	}
+	return isStatementEnder
 }
