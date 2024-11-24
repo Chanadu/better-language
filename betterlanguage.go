@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
+
 	"Better-Language/scanner"
 	"Better-Language/utils"
 )
@@ -47,7 +49,7 @@ func run(source string) error {
 
 	// Print Tokens
 	for _, t := range tokens {
-		fmt.Println(t)
+		fmt.Println(color.CyanString(t.String()))
 	}
 
 	// fmt.Println(source)

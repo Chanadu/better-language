@@ -3,6 +3,9 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"os"
+
+	"github.com/fatih/color"
 )
 
 func CreateError(message string) error {
@@ -22,7 +25,7 @@ func CreateScannerErrorf(line int, format string, args ...interface{}) error {
 }
 
 func reportError(e error) error {
-	if _, err := fmt.Println(e); err != nil {
+	if _, err := fmt.Fprintln(os.Stderr, color.RedString(e.Error())); err != nil {
 		return err
 	}
 	return nil

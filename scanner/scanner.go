@@ -131,7 +131,8 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 		shouldAdd = false
 	case '\n':
 		sc.lineNumber++
-		shouldAdd = false
+		// shouldAdd = false
+		tt = tokentype.Semicolon
 	case '"':
 		var err error = nil
 		tt = tokentype.String
