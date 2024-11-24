@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/fatih/color"
 
@@ -49,7 +50,8 @@ func run(source string) error {
 
 	// Print Tokens
 	for _, t := range tokens {
-		fmt.Println(color.CyanString(t.String()))
+		formattedToken := strings.Join(strings.Split(fmt.Sprintf("%#v", t.String()), " "), "\t")
+		fmt.Println(color.CyanString(formattedToken))
 	}
 
 	// fmt.Println(source)

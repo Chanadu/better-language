@@ -49,16 +49,17 @@ func _() {
 	_ = x[While-38]
 	_ = x[Break-39]
 	_ = x[Return-40]
-	_ = x[Function-41]
-	_ = x[Print-42]
-	_ = x[Var-43]
-	_ = x[Null-44]
-	_ = x[EndOfFile-45]
+	_ = x[Continue-41]
+	_ = x[Function-42]
+	_ = x[Print-43]
+	_ = x[Var-44]
+	_ = x[Null-45]
+	_ = x[EndOfFile-46]
 }
 
-const _TokenType_name = "BaseOpeningParenthesesClosingParenthesesOpeningCurlyBraceClosingCurlyBraceCommaDotSemicolonMinusPlusStarPercentSlashNotEqualNotEqualEqualEqualGreaterEqualGreaterBitwiseShiftRightLessEqualLessBitwiseShiftLeftOrBitwiseOrAndBitwiseAndBitwiseXorBitwiseNotIdentifierStringIntegerDoubleFalseTrueIfElseForWhileBreakReturnFunctionPrintVarNullEndOfFile"
+const _TokenType_name = "BaseOpeningParenthesesClosingParenthesesOpeningCurlyBraceClosingCurlyBraceCommaDotSemicolonMinusPlusStarPercentSlashNotEqualNotEqualEqualEqualGreaterEqualGreaterBitwiseShiftRightLessEqualLessBitwiseShiftLeftOrBitwiseOrAndBitwiseAndBitwiseXorBitwiseNotIdentifierStringIntegerDoubleFalseTrueIfElseForWhileBreakReturnContinueFunctionPrintVarNullEndOfFile"
 
-var _TokenType_index = [...]uint16{0, 4, 22, 40, 57, 74, 79, 82, 91, 96, 100, 104, 111, 116, 124, 127, 137, 142, 154, 161, 178, 187, 191, 207, 209, 218, 221, 231, 241, 251, 261, 267, 274, 280, 285, 289, 291, 295, 298, 303, 308, 314, 322, 327, 330, 334, 343}
+var _TokenType_index = [...]uint16{0, 4, 22, 40, 57, 74, 79, 82, 91, 96, 100, 104, 111, 116, 124, 127, 137, 142, 154, 161, 178, 187, 191, 207, 209, 218, 221, 231, 241, 251, 261, 267, 274, 280, 285, 289, 291, 295, 298, 303, 308, 314, 322, 330, 335, 338, 342, 351}
 
 func (i TokenType) String() string {
 	if i < 0 || i >= TokenType(len(_TokenType_index)-1) {

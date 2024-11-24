@@ -66,6 +66,7 @@ const (
 
 	Break
 	Return
+	Continue
 
 	Function
 
@@ -94,10 +95,26 @@ var KeywordsToTokenType = map[string]TokenType{
 	"while":    While,
 	"break":    Break,
 	"return":   Return,
+	"continue": Continue,
 	"function": Function,
 	"print":    Print,
 	"var":      Var,
 	"null":     Null,
 	// "class":    Class,
 	// "this":     This,
+}
+
+var NewLineSemicolonTokens = map[TokenType]struct{}{
+	ClosingParentheses: {},
+	ClosingCurlyBrace:  {},
+	Identifier:         {},
+	String:             {},
+	Integer:            {},
+	Double:             {},
+	True:               {},
+	False:              {},
+	Break:              {},
+	Return:             {},
+	Continue:           {},
+	Null:               {},
 }

@@ -264,22 +264,9 @@ func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, e error) {
 
 func (sc *scanner) scanNewLineToken() (isStatementEnder bool) {
 	prevToken := sc.tokens[len(sc.tokens)-1]
-	switch prevToken.Type {
-	case tokentype.ClosingParentheses,
-		tokentype.ClosingCurlyBrace,
-		tokentype.Identifier,
-		tokentype.String,
-		tokentype.Integer,
-		tokentype.Double,
-		tokentype.True,
-		tokentype.False,
-		tokentype.Break,
-		tokentype.Return,
-		tokentype.Null:
-
-		isStatementEnder = true
-	default:
-		isStatementEnder = false
+	if _, ok := tokentype.NewLineSemicolonTokens[prevToken.Type]; ok {
+		return true
+	} else {
+		return false
 	}
-	return isStatementEnder
 }
