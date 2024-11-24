@@ -52,6 +52,7 @@ func (sc *scanner) ScanTokens() ([]token.Token, error) {
 func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 	r := sc.advanceCurrent()
 	tt := tokentype.Base
+	shouldIncrementLineNumber := false
 	var literal interface{} = nil
 	shouldAdd := true
 	switch r {
@@ -130,7 +131,7 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 	case ' ', '\r', '\t':
 		shouldAdd = false
 	case '\n':
-		sc.lineNumber++
+		shouldIncrementLineNumber = true
 		// shouldAdd = false
 		isStatementEnder := sc.scanNewLineToken()
 		if isStatementEnder {
@@ -173,7 +174,13 @@ func (sc *scanner) scanToken() (t *token.Token, shouldAddToken bool, e error) {
 		}
 	}
 
-	return sc.createToken(tt, literal), shouldAdd, nil
+	t = sc.createToken(tt, literal)
+	if shouldIncrementLineNumber {
+		sc.lineNumber++
+	}
+
+	return t, shouldAdd, nil
+
 }
 
 func (sc *scanner) scanSlashToken() (tt tokentype.TokenType, shouldAddToken bool, e error) {
