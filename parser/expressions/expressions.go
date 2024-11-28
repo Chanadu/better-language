@@ -2,12 +2,11 @@ package expressions
 
 import (
 	"fmt"
-
-	"Better-Language/scanner"
 )
 
 type Expression interface {
 	ToGrammarString() string
+	ToReversePolishNotation() string
 }
 
 func parenthesizeExpression(name string, expressions ...Expression) (parenthesizedName string) {
@@ -19,40 +18,11 @@ func parenthesizeExpression(name string, expressions ...Expression) (parenthesiz
 	return parenthesizedName
 }
 
-type Binary struct {
-	Left     Expression
-	Operator scanner.Token
-	Right    Expression
-}
-
-func (b *Binary) ToGrammarString() string {
-	return parenthesizeExpression(b.Operator.Lexeme, b.Left, b.Right)
-}
-
-type Grouping struct {
-	InternalExpression Expression
-}
-
-func (g *Grouping) ToGrammarString() string {
-	return parenthesizeExpression("group", g.InternalExpression)
-}
-
-type Literal struct {
-	Value any
-}
-
-func (l *Literal) ToGrammarString() string {
-	if l.Value == nil {
-		return "null"
+func reversePolishNotation(name string, expressions ...Expression) (reversePolishNotation string) {
+	reversePolishNotation = ""
+	for _, expression := range expressions {
+		reversePolishNotation += fmt.Sprintf("%s ", expression.ToReversePolishNotation())
 	}
-	return fmt.Sprint(l.Value)
-}
-
-type Unary struct {
-	Operator scanner.Token
-	Right    Expression
-}
-
-func (u *Unary) ToGrammarString() string {
-	return parenthesizeExpression(u.Operator.Lexeme, u.Right)
+	reversePolishNotation += name
+	return reversePolishNotation
 }
