@@ -1,12 +1,11 @@
 package scanner
 
 import (
-	"Better-Language/scanner/token"
 	"Better-Language/scanner/tokentype"
 )
 
 func NewScanner(source string) Scanner {
-	return &scanner{source, []token.Token{}, 0, 0, 1, false}
+	return &scanner{source, []Token{}, 0, 0, 1, false}
 }
 
 func (sc *scanner) isAtEnd(offset int) bool {
@@ -19,8 +18,8 @@ func (sc *scanner) advanceCurrent() (r rune) {
 	return r
 }
 
-func (sc *scanner) createToken(tt tokentype.TokenType, literal interface{}) *token.Token {
-	return &token.Token{
+func (sc *scanner) createToken(tt tokentype.TokenType, literal interface{}) *Token {
+	return &Token{
 		Type:    tt,
 		Lexeme:  sc.source[sc.start:sc.current],
 		Literal: literal,
