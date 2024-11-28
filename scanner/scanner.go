@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"errors"
 	"strconv"
 
 	"Better-Language/scanner/tokentype"
@@ -9,14 +10,14 @@ import (
 
 type Scanner interface {
 	ScanTokens() ([]Token, error)
-	scanToken() (*Token, bool, error)
+	scanToken() (*Token, bool)
 	scanSlashToken() (tokentype.TokenType, bool, error)
-	scanStringToken() (interface{}, error)
-	scanNumberToken() (tokentype.TokenType, interface{}, error)
+	scanStringToken() (any, error)
+	scanNumberToken() (tokentype.TokenType, any, error)
 	scanIdentifierToken() (tokentype.TokenType, error)
 	isAtEnd(offset int) bool
 	advanceCurrent() rune
-	createToken(tt tokentype.TokenType, literal interface{}) *Token
+	createToken(tt tokentype.TokenType, literal any) *Token
 	match(expected rune) bool
 	peek(offset int) rune
 }
@@ -32,27 +33,22 @@ type scanner struct {
 func (sc *scanner) ScanTokens() ([]Token, error) {
 	for !sc.isAtEnd(0) {
 		sc.start = sc.current
-
-		t, shouldAddToken, err := sc.scanToken()
-		if err != nil {
-			return nil, err
-		}
+		t, shouldAddToken := sc.scanToken()
 
 		if shouldAddToken {
 			sc.tokens = append(sc.tokens, *t)
 		}
 	}
-
 	sc.tokens = append(sc.tokens, Token{Type: tokentype.EndOfFile, Lexeme: "", Literal: nil, Line: sc.lineNumber})
 
 	return sc.tokens, nil
 }
 
-func (sc *scanner) scanToken() (t *Token, shouldAddToken bool, e error) {
+func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 	r := sc.advanceCurrent()
 	tt := tokentype.Base
 	shouldIncrementLineNumber := false
-	var literal interface{} = nil
+	var literal any = nil
 	shouldAdd := true
 	switch r {
 	case '(':
@@ -81,7 +77,9 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool, e error) {
 		var err error = nil
 		tt, shouldAdd, err = sc.scanSlashToken()
 		if err != nil {
-			return &Token{}, false, err
+			sc.foundError = true
+			utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning slash token: %e", err)
+			return &Token{}, false
 		}
 	case '!':
 		if sc.match('=') {
@@ -144,16 +142,18 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool, e error) {
 		literal, err = sc.scanStringToken()
 
 		if err != nil {
-			return &Token{}, false, err
+			sc.foundError = true
+			utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning string token: %e", err)
+			return &Token{}, false
 		}
-	// case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-	//	tt = tokentype.Integer
 	default:
 		if utils.IsDigit(r) {
 			var err error
 			tt, literal, err = sc.scanNumberToken()
 			if err != nil {
-				return &Token{}, false, err
+				sc.foundError = true
+				utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning number token: %e", err)
+				return &Token{}, false
 			}
 			break
 		}
@@ -161,16 +161,15 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool, e error) {
 			var err error
 			tt, err = sc.scanIdentifierToken()
 			if err != nil {
-				return &Token{}, false, err
+				sc.foundError = true
+				utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning identifier token: %e", err)
+				return &Token{}, false
 			}
 			break
 		}
 
 		sc.foundError = true
-		err := utils.CreateAndReportScannerErrorf(sc.lineNumber, "Unexpected character: %c", r)
-		if err != nil {
-			return &Token{}, false, err
-		}
+		utils.CreateAndReportScannerErrorf(sc.lineNumber, "Unexpected character: %c", r)
 	}
 
 	t = sc.createToken(tt, literal)
@@ -178,7 +177,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool, e error) {
 		sc.lineNumber++
 	}
 
-	return t, shouldAdd, nil
+	return t, shouldAdd
 
 }
 
@@ -188,12 +187,11 @@ func (sc *scanner) scanSlashToken() (tt tokentype.TokenType, shouldAddToken bool
 			_ = sc.advanceCurrent()
 		}
 		return tokentype.Base, false, nil
-	} else {
-		return tokentype.Slash, true, nil
 	}
+	return tokentype.Slash, true, nil
 }
 
-func (sc *scanner) scanStringToken() (literal interface{}, e error) {
+func (sc *scanner) scanStringToken() (literal any, e error) {
 	for sc.peek(0) != '"' && !sc.isAtEnd(0) {
 		if sc.peek(0) == '\n' {
 			sc.lineNumber++
@@ -201,11 +199,8 @@ func (sc *scanner) scanStringToken() (literal interface{}, e error) {
 		_ = sc.advanceCurrent()
 	}
 	if sc.isAtEnd(0) {
-		err := utils.CreateAndReportScannerError(sc.lineNumber, "Unterminated string at EOF.")
-		if err != nil {
-			return nil, err
-		}
-		return nil, nil
+		sc.foundError = true
+		return nil, errors.New("unterminated string at EOF")
 	}
 
 	// Moves the current pointer to the closing quote (bc previously peeked)
@@ -216,9 +211,9 @@ func (sc *scanner) scanStringToken() (literal interface{}, e error) {
 	return strValue, nil
 }
 
-func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal interface{}, e error) {
+func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal any, e error) {
 	tt = tokentype.Integer
-	var lit interface{} = nil
+	var lit any = nil
 	// Integer Part, Number between 0 and 9
 	for sc.peek(0) >= '0' && sc.peek(0) <= '9' {
 		_ = sc.advanceCurrent()
@@ -237,6 +232,7 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal interface{
 		var err error = nil
 		lit, err = strconv.ParseFloat(sc.source[sc.start:sc.current], 64)
 		if err != nil {
+			sc.foundError = true
 			return tokentype.Base, nil, err
 		}
 
@@ -244,6 +240,7 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal interface{
 		var err error = nil
 		lit, err = strconv.ParseInt(sc.source[sc.start:sc.current], 10, 64)
 		if err != nil {
+			sc.foundError = true
 			return tokentype.Base, nil, err
 		}
 	}

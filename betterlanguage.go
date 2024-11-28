@@ -12,48 +12,39 @@ import (
 	"Better-Language/utils"
 )
 
-func LineReader() error {
+func LineReader() {
 	input := bufio.NewScanner(os.Stdin)
 
 	for input.Scan() {
 		line := input.Text()
-		// fmt.Println(line)
-		if err := run(line); err != nil {
-			return err
-		}
+		run(line)
 	}
 
 	if err := input.Err(); err != nil {
-		fmt.Println("Error reading input:", err)
+		utils.CreateAndReportErrorf("Error reading input: %e", err)
 	}
-	return nil
 }
 
-func FileReader(fileName string) error {
+func FileReader(fileName string) {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
-		return err
+		utils.CreateAndReportErrorf("File Reading Error: %e", err)
+		return
 	}
-	if err = run(string(data)); err != nil {
-		return err
-	}
-	return nil
+	run(string(data))
 }
 
-func run(source string) error {
-	// Get Tokens And Print Later
+func run(source string) {
 	sc := scanner.NewScanner(source)
 	tokens, err := sc.ScanTokens()
+
 	if err != nil {
-		return utils.CreateAndReportErrorf("Run Error: %e", err)
+		utils.CreateAndReportErrorf("Token Scanning Error: %e", err)
+		return
 	}
 
-	// Print Tokens
 	for _, t := range tokens {
 		formattedToken := strings.Join(strings.Split(fmt.Sprintf("%#v", t.String()), " "), "\t")
-		fmt.Println(color.CyanString(formattedToken))
+		utils.ReportDebugf("Token: %s", color.CyanString(formattedToken))
 	}
-
-	// fmt.Println(source)
-	return nil
 }

@@ -77,7 +77,7 @@ const (
 
 	EndOfFile
 
-	// Prolly won't use this stuff
+	// Won't use this stuff
 
 	// Class
 	// This

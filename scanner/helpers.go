@@ -18,7 +18,7 @@ func (sc *scanner) advanceCurrent() (r rune) {
 	return r
 }
 
-func (sc *scanner) createToken(tt tokentype.TokenType, literal interface{}) *Token {
+func (sc *scanner) createToken(tt tokentype.TokenType, literal any) *Token {
 	return &Token{
 		Type:    tt,
 		Lexeme:  sc.source[sc.start:sc.current],
