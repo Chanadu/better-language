@@ -1,6 +1,9 @@
 package parser
 
 import (
+	"fmt"
+	"strconv"
+
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
@@ -46,7 +49,13 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tok
 	if p.check(tokenType) {
 		return p.advance().Type
 	}
-	utils.CreateAndReportParsingError(p.peek(), errorMessage)
+	token := p.peek()
+	location := "EOF"
+	if token.Type != tokentype.EndOfFile {
+		location = strconv.Itoa(token.Line)
+	}
+	message := fmt.Sprintf("Parsing: %v at %s: %s", token.Lexeme, location, errorMessage)
+	utils.CreateAndReportParsingError(message)
 	return tokentype.Base
 }
 

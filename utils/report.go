@@ -4,12 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/fatih/color"
-
-	"Better-Language/scanner"
-	"Better-Language/scanner/tokentype"
 )
 
 func reportError(e error) {
@@ -38,11 +34,7 @@ func CreateAndReportScannerErrorf(line int, format string, args ...any) {
 	reportError(errorMessage)
 }
 
-func CreateAndReportParsingError(token scanner.Token, format string, args ...any) {
-	location := "EOF"
-	if token.Type != tokentype.EndOfFile {
-		location = strconv.Itoa(token.Line)
-	}
-	errorMessage := CreateErrorf(fmt.Sprintf("Parsing %v at %s: %s", token.Lexeme, location, fmt.Sprintf(format, args...)))
-	reportError(errorMessage)
+func CreateAndReportParsingError(format string, args ...any) {
+	errorMessage := fmt.Sprintf("Parsing: %s", fmt.Sprintf(format, args...))
+	reportError(errors.New(errorMessage))
 }
