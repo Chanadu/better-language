@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/fatih/color"
 
+	"Better-Language/parser"
+	"Better-Language/parser/expressions"
 	"Better-Language/scanner"
 	"Better-Language/utils"
 )
@@ -43,8 +44,29 @@ func run(source string) {
 		return
 	}
 
+	// printTokens(tokens)
+	statements, done := printExpressions(tokens, err)
+	if done {
+		return
+	}
+
+	// fmt.Println(statements)
+	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
+}
+
+func printExpressions(tokens []scanner.Token, err error) (expressions.Expression, bool) {
+	par := parser.NewParser(tokens)
+	statements, err := par.Parse()
+	if err != nil {
+		utils.CreateAndReportErrorf("Parsing Error: %e", err)
+		return nil, true
+	}
+	return statements, false
+}
+
+func printTokens(tokens []scanner.Token) {
 	for _, t := range tokens {
-		formattedToken := strings.Join(strings.Split(fmt.Sprintf("%#v", t.String()), " "), "\t")
+		formattedToken := fmt.Sprintf("Type: %20s \t\t Lexeme: %s \t\t Literal: %20v \t\t Line: %d", t.Type.String(), t.Lexeme, t.Literal, t.Line)
 		utils.ReportDebugf("Token: %s", color.CyanString(formattedToken))
 	}
 }

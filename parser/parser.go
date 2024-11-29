@@ -1,12 +1,30 @@
 package parser
 
 import (
+	"errors"
+
 	"Better-Language/parser/expressions"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 )
 
 type Parser interface {
+	Parse() (expressions.Expression, error)
+	parseExpression() expressions.Expression
+	parseLeftAssociativeBinary(parseFunc, []tokentype.TokenType) expressions.Expression
+	parseEquality() expressions.Expression
+	parseComparison() expressions.Expression
+	parseTerm() expressions.Expression
+	parseFactor() expressions.Expression
+	parseUnary() expressions.Expression
+	parsePrimary() expressions.Expression
+	peek() scanner.Token
+	previous() scanner.Token
+	advance() scanner.Token
+	check(tokentype.TokenType) bool
+	match(...tokentype.TokenType) bool
+	consume(tokentype.TokenType, string) tokentype.TokenType
+	isAtEnd() bool
 }
 
 type parser struct {
@@ -116,13 +134,18 @@ func (p *parser) parsePrimary() expressions.Expression {
 
 	if p.match(tokentype.OpeningParentheses) {
 		expression := p.parseExpression()
-		if !p.match(tokentype.ClosingParentheses) {
-			p.consume(tokentype.ClosingParentheses, "Expect ')' after expression.")
-			return &expressions.Grouping{
-				InternalExpression: expression,
-			}
+		p.consume(tokentype.ClosingParentheses, "Expect ')' after expression.")
+		return &expressions.Grouping{
+			InternalExpression: expression,
 		}
 	}
 
 	return nil
+}
+
+func (p *parser) Parse() (expressions.Expression, error) {
+	if p.tokens == nil {
+		return nil, errors.New("no tokens to parse, need to add tokens to parser")
+	}
+	return p.parseExpression(), nil
 }
