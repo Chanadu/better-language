@@ -4,10 +4,6 @@ import (
 	"Better-Language/scanner/tokentype"
 )
 
-func NewScanner(source string) Scanner {
-	return &scanner{source, []Token{}, 0, 0, 1, false}
-}
-
 func (sc *scanner) isAtEnd(offset int) bool {
 	return sc.current+offset >= len(sc.source)
 }

@@ -30,6 +30,17 @@ type scanner struct {
 	foundError     bool
 }
 
+func NewScanner(source string) Scanner {
+	return &scanner{
+		source:     source,
+		tokens:     []Token{},
+		start:      0,
+		current:    0,
+		lineNumber: 1,
+		foundError: false,
+	}
+}
+
 func (sc *scanner) ScanTokens() ([]Token, error) {
 	for !sc.isAtEnd(0) {
 		sc.start = sc.current
