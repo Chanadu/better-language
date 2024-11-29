@@ -118,3 +118,15 @@ var NewLineSemicolonTokens = map[TokenType]struct{}{
 	Continue:           {},
 	Null:               {},
 }
+
+var ParseSynchronizationTokens = map[TokenType]struct{}{
+	Function: {},
+	Var:      {},
+	If:       {},
+	While:    {},
+	For:      {},
+	Return:   {},
+	Break:    {},
+	Continue: {},
+	Print:    {},
+}

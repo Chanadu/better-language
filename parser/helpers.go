@@ -46,6 +46,16 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tok
 	if p.check(tokenType) {
 		return p.advance().Type
 	}
-	utils.CreateAndReportErrorf(errorMessage)
+	utils.CreateAndReportParsingError(p.peek(), errorMessage)
 	return tokentype.Base
+}
+
+func (p *parser) synchronize() {
+	p.advance()
+	for !p.isAtEnd() {
+		if _, ok := tokentype.ParseSynchronizationTokens[p.peek().Type]; ok {
+			return
+		}
+		p.advance()
+	}
 }
