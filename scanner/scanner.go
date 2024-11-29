@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 
+	"Better-Language/globals"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
 )
@@ -27,7 +28,6 @@ type scanner struct {
 	tokens         []Token
 	start, current int
 	lineNumber     int
-	foundError     bool
 }
 
 func NewScanner(source string) Scanner {
@@ -37,7 +37,6 @@ func NewScanner(source string) Scanner {
 		start:      0,
 		current:    0,
 		lineNumber: 1,
-		foundError: false,
 	}
 }
 
@@ -88,7 +87,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		var err error = nil
 		tt, shouldAdd, err = sc.scanSlashToken()
 		if err != nil {
-			sc.foundError = true
+			globals.HasErrors = true
 			utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning slash token: %e", err)
 			return &Token{}, false
 		}
@@ -153,7 +152,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		literal, err = sc.scanStringToken()
 
 		if err != nil {
-			sc.foundError = true
+			globals.HasErrors = true
 			utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning string token: %e", err)
 			return &Token{}, false
 		}
@@ -162,7 +161,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 			var err error
 			tt, literal, err = sc.scanNumberToken()
 			if err != nil {
-				sc.foundError = true
+				globals.HasErrors = true
 				utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning number token: %e", err)
 				return &Token{}, false
 			}
@@ -172,14 +171,14 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 			var err error
 			tt, err = sc.scanIdentifierToken()
 			if err != nil {
-				sc.foundError = true
+				globals.HasErrors = true
 				utils.CreateAndReportScannerErrorf(sc.lineNumber, "Error scanning identifier token: %e", err)
 				return &Token{}, false
 			}
 			break
 		}
 
-		sc.foundError = true
+		globals.HasErrors = true
 		utils.CreateAndReportScannerErrorf(sc.lineNumber, "Unexpected character: %c", r)
 	}
 
@@ -210,7 +209,7 @@ func (sc *scanner) scanStringToken() (literal any, e error) {
 		_ = sc.advanceCurrent()
 	}
 	if sc.isAtEnd(0) {
-		sc.foundError = true
+		globals.HasErrors = true
 		return nil, errors.New("unterminated string at EOF")
 	}
 
@@ -243,7 +242,7 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal any, e err
 		var err error = nil
 		lit, err = strconv.ParseFloat(sc.source[sc.start:sc.current], 64)
 		if err != nil {
-			sc.foundError = true
+			globals.HasErrors = true
 			return tokentype.Base, nil, err
 		}
 
@@ -251,7 +250,7 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal any, e err
 		var err error = nil
 		lit, err = strconv.ParseInt(sc.source[sc.start:sc.current], 10, 64)
 		if err != nil {
-			sc.foundError = true
+			globals.HasErrors = true
 			return tokentype.Base, nil, err
 		}
 	}

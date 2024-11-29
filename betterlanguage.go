@@ -7,6 +7,7 @@ import (
 
 	"github.com/fatih/color"
 
+	"Better-Language/globals"
 	"Better-Language/parser"
 	"Better-Language/parser/expressions"
 	"Better-Language/scanner"
@@ -43,6 +44,10 @@ func run(source string) {
 		utils.CreateAndReportErrorf("Token Scanning Error: %e", err)
 		return
 	}
+	if globals.HasErrors {
+		utils.ReportDebugf("Errors found in scanning, exiting")
+		return
+	}
 
 	// printTokens(tokens)
 	statements, done := printExpressions(tokens, err)
@@ -52,6 +57,10 @@ func run(source string) {
 
 	// fmt.Println(statements)
 	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
+	if globals.HasErrors {
+		utils.ReportDebugf("Errors found in parsing, exiting")
+		return
+	}
 }
 
 func printExpressions(tokens []scanner.Token, err error) (expressions.Expression, bool) {
@@ -64,6 +73,7 @@ func printExpressions(tokens []scanner.Token, err error) (expressions.Expression
 	return statements, false
 }
 
+//goland:noinspection GoUnusedFunction
 func printTokens(tokens []scanner.Token) {
 	for _, t := range tokens {
 		formattedToken := fmt.Sprintf("Type: %20s \t\t Lexeme: %s \t\t Literal: %20v \t\t Line: %d", t.Type.String(), t.Lexeme, t.Literal, t.Line)

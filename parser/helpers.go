@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"Better-Language/globals"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
@@ -49,6 +50,8 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tok
 	if p.check(tokenType) {
 		return p.advance().Type
 	}
+
+	globals.HasErrors = true
 	token := p.peek()
 	location := "EOF"
 	if token.Type != tokentype.EndOfFile {

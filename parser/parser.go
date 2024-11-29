@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 
+	"Better-Language/globals"
 	"Better-Language/parser/expressions"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
@@ -145,6 +146,7 @@ func (p *parser) parsePrimary() expressions.Expression {
 
 func (p *parser) Parse() (expressions.Expression, error) {
 	if p.tokens == nil {
+		globals.HasErrors = true
 		return nil, errors.New("no tokens to parse, need to add tokens to parser")
 	}
 	return p.parseExpression(), nil
