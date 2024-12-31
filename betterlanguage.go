@@ -67,7 +67,7 @@ func printExpressions(tokens []scanner.Token, err error) (expressions.Expression
 	par := parser.NewParser(tokens)
 	statements, err := par.Parse()
 	if err != nil {
-		utils.CreateAndReportErrorf("Parsing Error: %e", err)
+		utils.CreateAndReportParsingErrorf("%s", err.Error())
 		return nil, true
 	}
 	return statements, false

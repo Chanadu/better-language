@@ -11,26 +11,12 @@ import (
 
 type Parser interface {
 	Parse() (expressions.Expression, error)
-	parseExpression() expressions.Expression
-	parseLeftAssociativeBinary(parseFunc, []tokentype.TokenType) expressions.Expression
-	parseEquality() expressions.Expression
-	parseComparison() expressions.Expression
-	parseTerm() expressions.Expression
-	parseFactor() expressions.Expression
-	parseUnary() expressions.Expression
-	parsePrimary() expressions.Expression
-	peek() scanner.Token
-	previous() scanner.Token
-	advance() scanner.Token
-	check(tokentype.TokenType) bool
-	match(...tokentype.TokenType) bool
-	consume(tokentype.TokenType, string) tokentype.TokenType
-	isAtEnd() bool
 }
 
 type parser struct {
 	tokens  []scanner.Token
 	current int
+	err     error
 }
 
 func NewParser(tokenSlice []scanner.Token) Parser {
@@ -141,6 +127,7 @@ func (p *parser) parsePrimary() expressions.Expression {
 		}
 	}
 
+	p.err = errors.New("expect a primary expression")
 	return nil
 }
 
@@ -149,5 +136,6 @@ func (p *parser) Parse() (expressions.Expression, error) {
 		globals.HasErrors = true
 		return nil, errors.New("no tokens to parse, need to add tokens to parser")
 	}
-	return p.parseExpression(), nil
+	exp := p.parseExpression()
+	return exp, p.err
 }

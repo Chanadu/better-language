@@ -7,7 +7,6 @@ import (
 	"Better-Language/globals"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
-	"Better-Language/utils"
 )
 
 func (p *parser) peek() scanner.Token {
@@ -57,8 +56,8 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tok
 	if token.Type != tokentype.EndOfFile {
 		location = strconv.Itoa(token.Line)
 	}
-	message := fmt.Sprintf("Parsing: %v at %s: %s", token.Lexeme, location, errorMessage)
-	utils.CreateAndReportParsingError(message)
+
+	p.err = fmt.Errorf("%v at %s: %s", token.Lexeme, location, errorMessage)
 	return tokentype.Base
 }
 
