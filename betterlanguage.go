@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"text/tabwriter"
 
 	"github.com/fatih/color"
 
@@ -37,38 +38,45 @@ func FileReader(fileName string) {
 }
 
 func run(source string) {
+	tokens, done := runScanner(source)
+	if done {
+		return
+	}
+	printTokens(tokens)
+	// statements, done := runParser(tokens)
+	// if done {
+	// 	return
+	// }
+	// printExpressions(statements)
+}
+
+func runScanner(source string) (tokens []scanner.Token, done bool) {
 	sc := scanner.NewScanner(source)
 	tokens, err := sc.ScanTokens()
 
 	if err != nil {
 		utils.CreateAndReportErrorf("Token Scanning Error: %e", err)
-		return
+		return nil, true
 	}
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in scanning, exiting")
-		return
+		return nil, true
 	}
+	return tokens, false
+}
 
-	// printTokens(tokens)
-	// statements, done := printExpressions(tokens, err)
-	// if done {
-	// 	return
-	// }
-	//
-	// // fmt.Println(statements)
-	// utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
+func runParser(tokens []scanner.Token) (statements expressions.Expression, done bool) {
 	p := parser.NewParser(tokens)
 	statements, err := p.Parse()
 	if err != nil {
-		utils.CreateAndReportParsingErrorf("%e", err)
-		return
+		utils.CreateAndReportParsingErrorf("%s", err.Error())
+		return nil, true
 	}
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in parsing, exiting")
-		return
+		return nil, true
 	}
-
-	printExpressions(statements)
+	return statements, false
 }
 
 func printExpressions(statements expressions.Expression) {
@@ -77,8 +85,12 @@ func printExpressions(statements expressions.Expression) {
 
 //goland:noinspection GoUnusedFunction
 func printTokens(tokens []scanner.Token) {
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.Debug)
+	_, _ = fmt.Fprintln(w, color.CyanString("Type\tLexeme\tLiteral\tLine"))
 	for _, t := range tokens {
-		formattedToken := fmt.Sprintf("Type: %20s \t\t Lexeme: %s \t\t Literal: %20v \t\t Line: %d", t.Type.String(), t.Lexeme, t.Literal, t.Line)
-		utils.ReportDebugf("Token: %s", color.CyanString(formattedToken))
+		_, _ = fmt.Fprintln(w, color.CyanString(fmt.Sprintf("%s\t%#v\t%#v\t%d", t.Type.String(), t.Lexeme, t.Literal, t.Line)))
+	}
+	if err := w.Flush(); err != nil {
+		utils.CreateAndReportErrorf("Error printing tokens: %e", err)
 	}
 }
