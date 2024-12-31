@@ -50,27 +50,29 @@ func run(source string) {
 	}
 
 	// printTokens(tokens)
-	statements, done := printExpressions(tokens, err)
-	if done {
+	// statements, done := printExpressions(tokens, err)
+	// if done {
+	// 	return
+	// }
+	//
+	// // fmt.Println(statements)
+	// utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
+	p := parser.NewParser(tokens)
+	statements, err := p.Parse()
+	if err != nil {
+		utils.CreateAndReportParsingErrorf("%e", err)
 		return
 	}
-
-	// fmt.Println(statements)
-	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in parsing, exiting")
 		return
 	}
+
+	printExpressions(statements)
 }
 
-func printExpressions(tokens []scanner.Token, err error) (expressions.Expression, bool) {
-	par := parser.NewParser(tokens)
-	statements, err := par.Parse()
-	if err != nil {
-		utils.CreateAndReportParsingErrorf("%s", err.Error())
-		return nil, true
-	}
-	return statements, false
+func printExpressions(statements expressions.Expression) {
+	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
 }
 
 //goland:noinspection GoUnusedFunction

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"errors"
+	"fmt"
 
 	"Better-Language/globals"
 	"Better-Language/parser/expressions"
@@ -127,7 +128,7 @@ func (p *parser) parsePrimary() expressions.Expression {
 		}
 	}
 
-	p.err = errors.New("expect a primary expression")
+	p.err = fmt.Errorf("expect expression, found %s", p.peek().Lexeme)
 	return nil
 }
 
@@ -137,5 +138,8 @@ func (p *parser) Parse() (expressions.Expression, error) {
 		return nil, errors.New("no tokens to parse, need to add tokens to parser")
 	}
 	exp := p.parseExpression()
+	if p.err != nil {
+		globals.HasErrors = true
+	}
 	return exp, p.err
 }

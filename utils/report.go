@@ -35,6 +35,6 @@ func CreateAndReportScannerErrorf(line int, format string, args ...any) {
 }
 
 func CreateAndReportParsingErrorf(format string, args ...any) {
-	errorMessage := fmt.Sprintf("Parsing: %s", fmt.Sprintf(format, args...))
+	errorMessage := fmt.Sprintf("Parsing: %s\n", fmt.Sprintf(format, args...))
 	reportError(errors.New(errorMessage))
 }
