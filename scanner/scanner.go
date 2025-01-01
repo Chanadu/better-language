@@ -11,16 +11,6 @@ import (
 
 type Scanner interface {
 	ScanTokens() ([]Token, error)
-	scanToken() (*Token, bool)
-	scanSlashToken() (tokentype.TokenType, bool, error)
-	scanStringToken() (any, error)
-	scanNumberToken() (tokentype.TokenType, any, error)
-	scanIdentifierToken() (tokentype.TokenType, error)
-	isAtEnd(offset int) bool
-	advanceCurrent() rune
-	createToken(tt tokentype.TokenType, literal any) *Token
-	match(expected rune) bool
-	peek(offset int) rune
 }
 
 type scanner struct {
@@ -276,6 +266,9 @@ func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, e error) {
 }
 
 func (sc *scanner) scanNewLineToken() (isStatementEnder bool) {
+	if len(sc.tokens) == 0 {
+		return false
+	}
 	prevToken := sc.tokens[len(sc.tokens)-1]
 	if _, ok := tokentype.NewLineSemicolonTokens[prevToken.Type]; ok {
 		return true

@@ -43,11 +43,12 @@ func run(source string) {
 		return
 	}
 	printTokens(tokens)
-	// statements, done := runParser(tokens)
-	// if done {
-	// 	return
-	// }
-	// printExpressions(statements)
+
+	statements, done := runParser(tokens)
+	if done {
+		return
+	}
+	printExpressions(statements)
 }
 
 func runScanner(source string) (tokens []scanner.Token, done bool) {
