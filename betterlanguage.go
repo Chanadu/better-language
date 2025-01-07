@@ -40,13 +40,13 @@ func FileReader(fileName string) {
 func run(source string) {
 	tokens, done := runScanner(source)
 	if done {
-		return
+		os.Exit(1)
 	}
 	printTokens(tokens)
 
 	statements, done := runParser(tokens)
 	if done {
-		return
+		os.Exit(1)
 	}
 	printExpressions(statements)
 }

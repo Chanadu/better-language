@@ -27,14 +27,14 @@ func _() {
 	_ = x[Equal-16]
 	_ = x[GreaterEqual-17]
 	_ = x[Greater-18]
-	_ = x[BitwiseShiftRight-19]
-	_ = x[LessEqual-20]
-	_ = x[Less-21]
-	_ = x[BitwiseShiftLeft-22]
-	_ = x[Or-23]
-	_ = x[BitwiseOr-24]
-	_ = x[And-25]
-	_ = x[BitwiseAnd-26]
+	_ = x[LessEqual-19]
+	_ = x[Less-20]
+	_ = x[Or-21]
+	_ = x[And-22]
+	_ = x[BitwiseShiftLeft-23]
+	_ = x[BitwiseShiftRight-24]
+	_ = x[BitwiseAnd-25]
+	_ = x[BitwiseOr-26]
 	_ = x[BitwiseXor-27]
 	_ = x[BitwiseNot-28]
 	_ = x[Identifier-29]
@@ -57,9 +57,9 @@ func _() {
 	_ = x[EndOfFile-46]
 }
 
-const _TokenType_name = "BaseOpeningParenthesesClosingParenthesesOpeningCurlyBraceClosingCurlyBraceCommaDotSemicolonMinusPlusStarPercentSlashNotEqualNotEqualEqualEqualGreaterEqualGreaterBitwiseShiftRightLessEqualLessBitwiseShiftLeftOrBitwiseOrAndBitwiseAndBitwiseXorBitwiseNotIdentifierStringIntegerDoubleFalseTrueIfElseForWhileBreakReturnContinueFunctionPrintVarNullEndOfFile"
+const _TokenType_name = "BaseOpeningParenthesesClosingParenthesesOpeningCurlyBraceClosingCurlyBraceCommaDotSemicolonMinusPlusStarPercentSlashNotEqualNotEqualEqualEqualGreaterEqualGreaterLessEqualLessOrAndBitwiseShiftLeftBitwiseShiftRightBitwiseAndBitwiseOrBitwiseXorBitwiseNotIdentifierStringIntegerDoubleFalseTrueIfElseForWhileBreakReturnContinueFunctionPrintVarNullEndOfFile"
 
-var _TokenType_index = [...]uint16{0, 4, 22, 40, 57, 74, 79, 82, 91, 96, 100, 104, 111, 116, 124, 127, 137, 142, 154, 161, 178, 187, 191, 207, 209, 218, 221, 231, 241, 251, 261, 267, 274, 280, 285, 289, 291, 295, 298, 303, 308, 314, 322, 330, 335, 338, 342, 351}
+var _TokenType_index = [...]uint16{0, 4, 22, 40, 57, 74, 79, 82, 91, 96, 100, 104, 111, 116, 124, 127, 137, 142, 154, 161, 170, 174, 176, 179, 195, 212, 222, 231, 241, 251, 261, 267, 274, 280, 285, 289, 291, 295, 298, 303, 308, 314, 322, 330, 335, 338, 342, 351}
 
 func (i TokenType) String() string {
 	if i < 0 || i >= TokenType(len(_TokenType_index)-1) {

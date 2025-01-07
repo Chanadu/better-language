@@ -75,11 +75,23 @@ func (p *parser) parseTerm() expressions.Expression {
 	})
 }
 
-// Factor -> Unary ( ( "*" | "/" ) Unary )* ;
+// Factor -> Bitwise ( ( "*" | "/" ) Bitwise )* ;
 func (p *parser) parseFactor() expressions.Expression {
-	return p.parseLeftAssociativeBinary(p.parseUnary, []tokentype.TokenType{
+	return p.parseLeftAssociativeBinary(p.parseBitwise, []tokentype.TokenType{
 		tokentype.Star,
 		tokentype.Slash,
+	})
+}
+
+// Bitwise -> Unary ( ( "*" | "/" ) Unary )* ;
+func (p *parser) parseBitwise() expressions.Expression {
+	return p.parseLeftAssociativeBinary(p.parseUnary, []tokentype.TokenType{
+		tokentype.BitwiseNot,
+		tokentype.BitwiseOr,
+		tokentype.BitwiseAnd,
+		tokentype.BitwiseXor,
+		tokentype.BitwiseShiftLeft,
+		tokentype.BitwiseShiftRight,
 	})
 }
 

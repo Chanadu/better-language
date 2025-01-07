@@ -32,18 +32,17 @@ const (
 
 	GreaterEqual
 	Greater
-	BitwiseShiftRight
 
 	LessEqual
 	Less
-	BitwiseShiftLeft
 
 	Or
-	BitwiseOr
-
 	And
-	BitwiseAnd
 
+	BitwiseShiftLeft
+	BitwiseShiftRight
+	BitwiseAnd
+	BitwiseOr
 	BitwiseXor
 	BitwiseNot
 
