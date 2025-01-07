@@ -78,3 +78,12 @@
 ## Other
 - Comments (//)
 - Ignore Whitespace 
+
+
+## Todo
+- arrays
+- ++ and --
+- +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=
+- ternary operator
+- switch case
+- do while
