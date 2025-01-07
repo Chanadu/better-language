@@ -109,6 +109,7 @@ func (p *parser) parseFactor() expressions.Expression {
 	return p.parseLeftAssociativeBinary(p.parseUnary, []tokentype.TokenType{
 		tokentype.Star,
 		tokentype.Slash,
+		tokentype.Percent,
 	})
 }
 
