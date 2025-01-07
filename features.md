@@ -5,59 +5,59 @@
 - )
 - {
 - }
-- 
+
 - ,
 - .
 - ;
-- 
+
 - \-
 - \+
 - \*
 - %
 - /
-- 
+
 - !=
 - !
 - ==
 - =
-- 
+
 - \>=
 - \>
 - <=
 - <
-- 
+
 - ||
 - &&
-- 
+
 - <<
 - \>>
 - &&
 - ||
 - ^
 - ~
-- 
+
 - Identifier (a)
 - String ("a")
 - Integer (1)
 - Double (1.5)
-- 
+
 - false
 - true
-- 
+
 - if
 - else
 - for
 - while
-- 
+
 - break
 - return
 - continue
-- 
+
 - function
-- 
+
 - print
 - var
-- 
+
 - null
 
 - EOF
@@ -84,6 +84,6 @@
 - arrays
 - ++ and --
 - +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=
-- ternary operator
+- ternary operator (? \_ : \_)
 - switch case
 - do while
