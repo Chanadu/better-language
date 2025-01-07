@@ -97,7 +97,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		if sc.match('=') {
 			tt = tokentype.GreaterEqual
 		} else if sc.match('>') {
-			tt = tokentype.BitwiseShiftRight
+			tt = tokentype.BitwiseRightShift
 		} else {
 			tt = tokentype.Greater
 		}
@@ -105,7 +105,7 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		if sc.match('=') {
 			tt = tokentype.LessEqual
 		} else if sc.match('<') {
-			tt = tokentype.BitwiseShiftLeft
+			tt = tokentype.BitwiseLeftShift
 		} else {
 			tt = tokentype.Less
 		}
@@ -113,18 +113,18 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		if sc.match('|') {
 			tt = tokentype.Or
 		} else {
-			tt = tokentype.BitwiseOr
+			tt = tokentype.BitwiseOR
 		}
 	case '&':
 		if sc.match('&') {
 			tt = tokentype.And
 		} else {
-			tt = tokentype.BitwiseAnd
+			tt = tokentype.BitwiseAND
 		}
 	case '^':
-		tt = tokentype.BitwiseXor
+		tt = tokentype.BitwiseXOR
 	case '~':
-		tt = tokentype.BitwiseNot
+		tt = tokentype.BitwiseNOT
 	case ' ', '\r', '\t':
 		shouldAdd = false
 	case '\n':

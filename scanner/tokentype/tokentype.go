@@ -39,12 +39,12 @@ const (
 	Or
 	And
 
-	BitwiseShiftLeft
-	BitwiseShiftRight
-	BitwiseAnd
-	BitwiseOr
-	BitwiseXor
-	BitwiseNot
+	BitwiseLeftShift
+	BitwiseRightShift
+	BitwiseAND
+	BitwiseOR
+	BitwiseXOR
+	BitwiseNOT
 
 	// Literals
 

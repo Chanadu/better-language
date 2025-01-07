@@ -33,7 +33,7 @@ func (p *parser) parseExpression() expressions.Expression {
 
 type parseFunc func() expressions.Expression
 
-// LeftAssociativeBinary -> fn ( (tokens) fn )* ;
+// LeftAssociativeBinary -> fn ( (tokens) fn )*
 func (p *parser) parseLeftAssociativeBinary(fn parseFunc, tokens []tokentype.TokenType) expressions.Expression {
 	left := fn()
 	for p.match(tokens...) {
@@ -49,7 +49,7 @@ func (p *parser) parseLeftAssociativeBinary(fn parseFunc, tokens []tokentype.Tok
 	return left
 }
 
-// Equality -> Comparison ( ( "!=" | "==" ) Comparison )* ;
+// Equality -> Comparison ( ( "!=" | "==" ) Comparison )*
 func (p *parser) parseEquality() expressions.Expression {
 	return p.parseLeftAssociativeBinary(p.parseComparison, []tokentype.TokenType{
 		tokentype.NotEqual,
@@ -57,13 +57,42 @@ func (p *parser) parseEquality() expressions.Expression {
 	})
 }
 
-// Comparison -> Term ( ( ">" | ">=" | "<" | "<=" ) Term )* ;
+// Comparison -> Bitwise OR ( ( ">" | ">=" | "<" | "<=" ) Bitwise OR)*
 func (p *parser) parseComparison() expressions.Expression {
-	return p.parseLeftAssociativeBinary(p.parseTerm, []tokentype.TokenType{
+	return p.parseLeftAssociativeBinary(p.parseBitwiseOR, []tokentype.TokenType{
 		tokentype.Greater,
 		tokentype.GreaterEqual,
 		tokentype.Less,
 		tokentype.LessEqual,
+	})
+}
+
+// Bitwise OR -> Bitwise XOR ( ( "|" ) Bitwise XOR)*
+func (p *parser) parseBitwiseOR() expressions.Expression {
+	return p.parseLeftAssociativeBinary(p.parseBitwiseXOR, []tokentype.TokenType{
+		tokentype.BitwiseOR,
+	})
+}
+
+// Bitwise XOR -> Bitwise AND ( ( "^" ) Bitwise AND)*
+func (p *parser) parseBitwiseXOR() expressions.Expression {
+	return p.parseLeftAssociativeBinary(p.parseBitwiseAND, []tokentype.TokenType{
+		tokentype.BitwiseXOR,
+	})
+}
+
+// Bitwise AND -> Bitwise Shift ( ( "&" ) Bitwise Shift)*
+func (p *parser) parseBitwiseAND() expressions.Expression {
+	return p.parseLeftAssociativeBinary(p.parseBitwiseShift, []tokentype.TokenType{
+		tokentype.BitwiseAND,
+	})
+}
+
+// Bitwise Shift -> Term ( ( "<<" | ">>" ) Term )*
+func (p *parser) parseBitwiseShift() expressions.Expression {
+	return p.parseLeftAssociativeBinary(p.parseTerm, []tokentype.TokenType{
+		tokentype.BitwiseRightShift,
+		tokentype.BitwiseLeftShift,
 	})
 }
 
@@ -77,27 +106,15 @@ func (p *parser) parseTerm() expressions.Expression {
 
 // Factor -> Bitwise ( ( "*" | "/" ) Bitwise )* ;
 func (p *parser) parseFactor() expressions.Expression {
-	return p.parseLeftAssociativeBinary(p.parseBitwise, []tokentype.TokenType{
+	return p.parseLeftAssociativeBinary(p.parseUnary, []tokentype.TokenType{
 		tokentype.Star,
 		tokentype.Slash,
 	})
 }
 
-// Bitwise -> Unary ( ( "*" | "/" ) Unary )* ;
-func (p *parser) parseBitwise() expressions.Expression {
-	return p.parseLeftAssociativeBinary(p.parseUnary, []tokentype.TokenType{
-		tokentype.BitwiseNot,
-		tokentype.BitwiseOr,
-		tokentype.BitwiseAnd,
-		tokentype.BitwiseXor,
-		tokentype.BitwiseShiftLeft,
-		tokentype.BitwiseShiftRight,
-	})
-}
-
-// Unary -> ( "-" | "!" ) Unary | Primary ;
+// Unary -> ( "-" | "!" | "~" ) Unary | Primary ;
 func (p *parser) parseUnary() expressions.Expression {
-	if p.match(tokentype.Minus, tokentype.Not) {
+	if p.match(tokentype.Minus, tokentype.Not, tokentype.BitwiseNOT) {
 		operator := p.previous()
 		right := p.parseUnary()
 
