@@ -125,6 +125,10 @@ func (sc *scanner) scanToken() (t *Token, shouldAddToken bool) {
 		tt = tokentype.BitwiseXOR
 	case '~':
 		tt = tokentype.BitwiseNOT
+	case '?':
+		tt = tokentype.QuestionMark
+	case ':':
+		tt = tokentype.Colon
 	case ' ', '\r', '\t':
 		shouldAdd = false
 	case '\n':

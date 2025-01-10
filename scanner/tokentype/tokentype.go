@@ -76,6 +76,10 @@ const (
 
 	EndOfFile
 
+	// Ternary
+	QuestionMark
+	Colon
+
 	// Won't use this stuff
 
 	// Class

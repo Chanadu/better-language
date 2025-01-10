@@ -28,7 +28,23 @@ func NewParser(tokenSlice []scanner.Token) Parser {
 }
 
 func (p *parser) parseExpression() expressions.Expression {
-	return p.parseEquality()
+	return p.parseTernary()
+}
+
+func (p *parser) parseTernary() expressions.Expression {
+	condition := p.parseEquality()
+	if p.match(tokentype.QuestionMark) {
+		trueBranch := p.parseExpression()
+		if p.consume(tokentype.Colon, "expected ':' after ternary") {
+			falseBranch := p.parseExpression()
+			return &expressions.Ternary{
+				Condition:   condition,
+				TrueBranch:  trueBranch,
+				FalseBranch: falseBranch,
+			}
+		}
+	}
+	return condition
 }
 
 type parseFunc func() expressions.Expression
@@ -158,7 +174,7 @@ func (p *parser) parsePrimary() expressions.Expression {
 		}
 	}
 
-	p.err = fmt.Errorf("expect expression, found %s", p.peek().Lexeme)
+	p.err = fmt.Errorf("expect expression, found '%s'", p.peek().Lexeme)
 	return nil
 }
 
