@@ -44,9 +44,10 @@ func (p *parser) match(tokenTypes ...tokentype.TokenType) bool {
 	return false
 }
 
-func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tokentype.TokenType {
+func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) (found bool) {
 	if p.check(tokenType) {
-		return p.advance().Type
+		p.advance()
+		return true
 	}
 
 	token := p.peek()
@@ -56,7 +57,7 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) tok
 	}
 
 	p.err = fmt.Errorf("%v at %s: %s", token.Lexeme, location, errorMessage)
-	return tokentype.Base
+	return false
 }
 
 func (p *parser) synchronize() {

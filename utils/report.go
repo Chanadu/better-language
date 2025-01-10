@@ -9,7 +9,7 @@ import (
 )
 
 func reportError(e error) {
-	_, _ = fmt.Fprintf(os.Stderr, "%s", color.RedString(fmt.Sprintf("Error: %s", e.Error())))
+	_, _ = fmt.Fprintf(os.Stderr, "%s", color.RedString(fmt.Sprintf("Error: %s\n", e.Error())))
 }
 
 func ReportDebugf(format string, args ...any) {
