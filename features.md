@@ -88,6 +88,6 @@
 - arrays
 - ++ and --
 - +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=
-- ternary operator (? \_ : \_) ~
 - switch case
 - do while
+- comma operator
