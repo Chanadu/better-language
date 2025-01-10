@@ -83,8 +83,14 @@
 - Comments (//)
 - Ignore Whitespace 
 
-
 ## Todo
+- and or
+- functions
+- scope
+- control flow
+- variables
+- print
+
 - arrays
 - ++ and --
 - +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=

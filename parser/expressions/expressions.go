@@ -7,6 +7,7 @@ import (
 type Expression interface {
 	ToGrammarString() string
 	ToReversePolishNotation() string
+	Interpret() (any, error)
 }
 
 func parenthesizeExpression(name string, expressions ...Expression) (parenthesizedName string) {

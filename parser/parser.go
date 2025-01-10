@@ -31,6 +31,7 @@ func (p *parser) parseExpression() expressions.Expression {
 	return p.parseTernary()
 }
 
+// Ternary -> Equality ( "?" Expression ":" Expression )?
 func (p *parser) parseTernary() expressions.Expression {
 	condition := p.parseEquality()
 	if p.match(tokentype.QuestionMark) {
@@ -52,7 +53,7 @@ type parseFunc func() expressions.Expression
 // LeftAssociativeBinary -> fn ( (tokens) fn )*
 func (p *parser) parseLeftAssociativeBinary(fn parseFunc, tokens []tokentype.TokenType) expressions.Expression {
 	left := fn()
-	for p.match(tokens...) {
+	if p.match(tokens...) {
 		operator := p.previous()
 		right := fn()
 

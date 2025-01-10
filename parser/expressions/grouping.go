@@ -11,3 +11,7 @@ func (g *Grouping) ToGrammarString() string {
 func (g *Grouping) ToReversePolishNotation() string {
 	return g.InternalExpression.ToReversePolishNotation()
 }
+
+func (g *Grouping) Interpret() (any, error) {
+	return g.InternalExpression.Interpret()
+}

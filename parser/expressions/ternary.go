@@ -13,3 +13,7 @@ func (t Ternary) ToGrammarString() string {
 func (t Ternary) ToReversePolishNotation() string {
 	return reversePolishNotation("?", t.Condition, t.TrueBranch, t.FalseBranch)
 }
+
+func (t Ternary) Interpret() (any, error) {
+	panic("implement me")
+}

@@ -17,3 +17,7 @@ func (b *Binary) ToGrammarString() string {
 func (b *Binary) ToReversePolishNotation() string {
 	return reversePolishNotation(b.Operator.Lexeme, b.Left, b.Right)
 }
+
+func (b *Binary) Interpret() (any, error) {
+	panic("implement me")
+}
