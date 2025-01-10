@@ -2,6 +2,7 @@ package expressions
 
 import (
 	"Better-Language/scanner"
+	"Better-Language/scanner/tokentype"
 )
 
 type Binary struct {
@@ -19,5 +20,41 @@ func (b *Binary) ToReversePolishNotation() string {
 }
 
 func (b *Binary) Interpret() (any, error) {
+	_, err := b.Left.Interpret()
+	if err != nil {
+		return nil, err
+	}
+	_, err = b.Right.Interpret()
+	if err != nil {
+		return nil, err
+	}
+
+	switch b.Operator.Type {
+	case tokentype.NotEqual:
+	case tokentype.EqualEqual:
+
+	case tokentype.Greater:
+	case tokentype.GreaterEqual:
+	case tokentype.Less:
+	case tokentype.LessEqual:
+
+	case tokentype.BitwiseOR:
+
+	case tokentype.BitwiseXOR:
+
+	case tokentype.BitwiseAND:
+
+	case tokentype.BitwiseLeftShift:
+	case tokentype.BitwiseRightShift:
+
+	case tokentype.Minus:
+	case tokentype.Plus:
+
+	case tokentype.Star:
+	case tokentype.Slash:
+	case tokentype.Percent:
+	default:
+		panic("Unknown binary operator")
+	}
 	panic("implement me")
 }
