@@ -3,6 +3,7 @@ package expressions
 import (
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
+	"Better-Language/utils"
 )
 
 type Binary struct {
@@ -20,11 +21,11 @@ func (b *Binary) ToReversePolishNotation() string {
 }
 
 func (b *Binary) Interpret() (any, error) {
-	_, err := b.Left.Interpret()
+	left, err := b.Left.Interpret()
 	if err != nil {
 		return nil, err
 	}
-	_, err = b.Right.Interpret()
+	right, err := b.Right.Interpret()
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +49,11 @@ func (b *Binary) Interpret() (any, error) {
 	case tokentype.BitwiseRightShift:
 
 	case tokentype.Minus:
+		if !utils.IsNumber(left) || !utils.IsNumber(right) {
+			return nil, utils.CreateErrorf("expect a number after '-'")
+		}
 	case tokentype.Plus:
-
+		
 	case tokentype.Star:
 	case tokentype.Slash:
 	case tokentype.Percent:
