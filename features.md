@@ -49,6 +49,9 @@
 - for
 - while
 
+- ?
+- :
+
 - break
 - return
 - continue
@@ -74,6 +77,7 @@
 - Bitwise AND Operator (&)
 - Comparison Operators (<, <=, >, >=)
 - Equality Operators (==, !=)
+- Ternary Operator (? :)
 
 ## Other
 - Comments (//)
@@ -84,6 +88,6 @@
 - arrays
 - ++ and --
 - +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=
-- ternary operator (? \_ : \_)
+- ternary operator (? \_ : \_) ~
 - switch case
 - do while
