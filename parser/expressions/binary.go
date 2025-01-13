@@ -49,11 +49,32 @@ func (b *Binary) Interpret() (any, error) {
 	case tokentype.BitwiseRightShift:
 
 	case tokentype.Minus:
-		if !utils.IsNumber(left) || !utils.IsNumber(right) {
-			return nil, utils.CreateErrorf("expect a number after '-'")
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateErrorf("Left Operand of (%s) must be numbers", b.Operator) // TODO: Add Line Number
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateErrorf("Right Operand of (%s) must be numbers", b.Operator) // TODO: Add Line Number
+		}
+
+		if lfOk && rfOk {
+			return lf - rf, nil
+		}
+		if liOk && riOk {
+			return li - ri, nil
+		}
+		if lfOk && riOk {
+			return lf - float64(ri), nil
+		}
+		if liOk && rfOk {
+			return float64(li) - rf, nil
 		}
 	case tokentype.Plus:
-		
+
 	case tokentype.Star:
 	case tokentype.Slash:
 	case tokentype.Percent:
