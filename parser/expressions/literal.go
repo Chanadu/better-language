@@ -22,6 +22,6 @@ func (l *Literal) ToReversePolishNotation() string {
 	return fmt.Sprint(l.Value)
 }
 
-func (l *Literal) Interpret() (any, error) {
+func (l *Literal) Evaluate() (any, error) {
 	return l.Value, nil
 }

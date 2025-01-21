@@ -14,6 +14,6 @@ func (t Ternary) ToReversePolishNotation() string {
 	return reversePolishNotation("?", t.Condition, t.TrueBranch, t.FalseBranch)
 }
 
-func (t Ternary) Interpret() (any, error) {
+func (t Ternary) Evaluate() (any, error) {
 	panic("implement me")
 }

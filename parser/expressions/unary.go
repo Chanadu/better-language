@@ -19,15 +19,15 @@ func (u *Unary) ToReversePolishNotation() string {
 	return reversePolishNotation(u.Operator.Lexeme, u.Right)
 }
 
-func (u *Unary) Interpret() (any, error) {
-	right, _ := u.Right.Interpret()
+func (u *Unary) Evaluate() (any, error) {
+	right, _ := u.Right.Evaluate()
 	switch u.Operator.Type {
 	case tokentype.Minus:
 		d, dOk := right.(float64)
 		i, iOk := right.(int)
 
 		if !dOk && !iOk {
-			return nil, utils.CreateErrorf("expect a number(double or int) after '-'")
+			return nil, utils.CreateRuntimeErrorf(u.Operator.Line, "expect a number(double or int) after '-'")
 		}
 		if dOk && iOk {
 			panic("Number is both int and float64")
@@ -41,14 +41,14 @@ func (u *Unary) Interpret() (any, error) {
 	case tokentype.Not:
 		b, ok := right.(bool)
 		if !ok {
-			return nil, utils.CreateErrorf("expect a boolean after '!'")
+			return nil, utils.CreateRuntimeErrorf(u.Operator.Line, "expect a boolean after '!'")
 		}
 		return !b, nil
 
 	case tokentype.BitwiseNOT:
 		i, ok := right.(int)
 		if !ok {
-			return nil, utils.CreateErrorf("expect an integer after '~'")
+			return nil, utils.CreateRuntimeErrorf(u.Operator.Line, "expect an integer after '~'")
 		}
 		return ^i, nil
 	default:

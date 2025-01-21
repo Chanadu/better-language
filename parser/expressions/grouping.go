@@ -12,6 +12,6 @@ func (g *Grouping) ToReversePolishNotation() string {
 	return g.InternalExpression.ToReversePolishNotation()
 }
 
-func (g *Grouping) Interpret() (any, error) {
-	return g.InternalExpression.Interpret()
+func (g *Grouping) Evaluate() (any, error) {
+	return g.InternalExpression.Evaluate()
 }

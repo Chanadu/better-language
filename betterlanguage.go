@@ -44,26 +44,31 @@ func run(source string) {
 	}
 	printTokens(tokens)
 
-	statements, done := runParser(tokens)
-	if done {
+	statement, ok := runParser(tokens)
+	if ok {
 		os.Exit(1)
 	}
-	printExpressions(statements)
+	printExpressions(statement)
+
+	ok = parser.Interpret(statement)
+	if !ok {
+		os.Exit(1)
+	}
 }
 
-func runScanner(source string) (tokens []scanner.Token, done bool) {
+func runScanner(source string) (tokens []scanner.Token, ok bool) {
 	sc := scanner.NewScanner(source)
 	tokens, err := sc.ScanTokens()
 
 	if err != nil {
 		utils.CreateAndReportErrorf("Token Scanning Error: %e", err)
-		return nil, true
+		return nil, false
 	}
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in scanning, exiting")
-		return nil, true
+		return nil, false
 	}
-	return tokens, false
+	return tokens, true
 }
 
 func runParser(tokens []scanner.Token) (statements expressions.Expression, done bool) {

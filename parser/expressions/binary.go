@@ -20,34 +20,155 @@ func (b *Binary) ToReversePolishNotation() string {
 	return reversePolishNotation(b.Operator.Lexeme, b.Left, b.Right)
 }
 
-func (b *Binary) Interpret() (any, error) {
-	left, err := b.Left.Interpret()
+func (b *Binary) Evaluate() (any, error) {
+	left, err := b.Left.Evaluate()
 	if err != nil {
 		return nil, err
 	}
-	right, err := b.Right.Interpret()
+	right, err := b.Right.Evaluate()
 	if err != nil {
 		return nil, err
 	}
 
 	switch b.Operator.Type {
 	case tokentype.NotEqual:
+		return left != right, nil
 	case tokentype.EqualEqual:
-
+		return left == right, nil
 	case tokentype.Greater:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf > rf, nil
+		}
+		if liOk && riOk {
+			return li > ri, nil
+		}
+		if lfOk {
+			return lf > float64(ri), nil
+		}
+		return float64(li) > rf, nil
 	case tokentype.GreaterEqual:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf >= rf, nil
+		}
+		if liOk && riOk {
+			return li >= ri, nil
+		}
+		if lfOk {
+			return lf >= float64(ri), nil
+		}
+		return float64(li) >= rf, nil
 	case tokentype.Less:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf < rf, nil
+		}
+		if liOk && riOk {
+			return li < ri, nil
+		}
+		if lfOk {
+			return lf < float64(ri), nil
+		}
+		return float64(li) < rf, nil
 	case tokentype.LessEqual:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
 
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateErrorf("Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf <= rf, nil
+		}
+		if liOk && riOk {
+			return li <= ri, nil
+		}
+		if lfOk {
+			return lf <= float64(ri), nil
+		}
+		return float64(li) <= rf, nil
 	case tokentype.BitwiseOR:
-
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		return li | ri, nil
 	case tokentype.BitwiseXOR:
-
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		return li ^ ri, nil
 	case tokentype.BitwiseAND:
-
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		return li & ri, nil
 	case tokentype.BitwiseLeftShift:
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		if li < 0 {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be positive", b.Operator.Lexeme)
+		}
+		if ri < 0 {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be positive", b.Operator.Lexeme)
+		}
+		return li << uint(ri), nil
 	case tokentype.BitwiseRightShift:
-
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		if li < 0 {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be positive", b.Operator.Lexeme)
+		}
+		if ri < 0 {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be positive", b.Operator.Lexeme)
+		}
+		return li >> uint(ri), nil
 	case tokentype.Minus:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
@@ -55,10 +176,10 @@ func (b *Binary) Interpret() (any, error) {
 		ri, riOk := right.(int)
 
 		if !lfOk && !liOk {
-			return nil, utils.CreateErrorf("Left Operand of (%s) must be numbers", b.Operator) // TODO: Add Line Number
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
 		}
 		if !rfOk && !riOk {
-			return nil, utils.CreateErrorf("Right Operand of (%s) must be numbers", b.Operator) // TODO: Add Line Number
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
 		}
 
 		if lfOk && rfOk {
@@ -67,19 +188,108 @@ func (b *Binary) Interpret() (any, error) {
 		if liOk && riOk {
 			return li - ri, nil
 		}
-		if lfOk && riOk {
+		if lfOk {
 			return lf - float64(ri), nil
 		}
-		if liOk && rfOk {
-			return float64(li) - rf, nil
-		}
+		return float64(li) - rf, nil
 	case tokentype.Plus:
+		if _, ok := left.(string); ok {
+			if _, ok := right.(string); ok {
+				return left.(string) + right.(string), nil
+			}
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be string", b.Operator.Lexeme)
+		}
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
 
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf + rf, nil
+		}
+		if liOk && riOk {
+			return li + ri, nil
+		}
+		if lfOk {
+			return lf + float64(ri), nil
+		}
+		return float64(li) + rf, nil
 	case tokentype.Star:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf * rf, nil
+		}
+		if liOk && riOk {
+			return li * ri, nil
+		}
+		if lfOk {
+			return lf * float64(ri), nil
+		}
+		return float64(li) * rf, nil
 	case tokentype.Slash:
+		lf, lfOk := left.(float64)
+		rf, rfOk := right.(float64)
+		li, liOk := left.(int)
+		ri, riOk := right.(int)
+
+		if !lfOk && !liOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+		if !rfOk && !riOk {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
+		}
+
+		if lfOk && rfOk {
+			return lf / rf, nil
+		}
+		if liOk && riOk {
+			return li / ri, nil
+		}
+		if lfOk {
+			return lf / float64(ri), nil
+		}
+		return float64(li) / rf, nil
 	case tokentype.Percent:
+		li, ri, err := integerBinaryExpression(b.Operator, left, right)
+		if err != nil {
+			return nil, err
+		}
+		return li % ri, nil
 	default:
 		panic("Unknown binary operator")
 	}
-	panic("implement me")
+}
+
+func integerBinaryExpression(operator scanner.Token, left any, right any) (l int, r int, err error) {
+	l, lOk := left.(int)
+	r, rOk := right.(int)
+	if !lOk && !rOk {
+		return 0, 0, utils.CreateRuntimeErrorf(operator.Line, "Left and Right Operand of (%s) must be int", operator.Lexeme)
+	}
+	if !lOk {
+		return 0, 0, utils.CreateRuntimeErrorf(operator.Line, "Left Operand of (%s) must be int", operator.Lexeme)
+	}
+	if !rOk {
+		return 0, 0, utils.CreateRuntimeErrorf(operator.Line, "Right Operand of (%s) must be int", operator.Lexeme)
+	}
+
+	return l, r, nil
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func reportError(e error) {
+func ReportError(e error) {
 	_, _ = fmt.Fprintf(os.Stderr, "%s", color.RedString(fmt.Sprintf("Error: %s\n", e.Error())))
 }
 
@@ -22,7 +22,7 @@ func CreateErrorf(format string, args ...any) error {
 
 func CreateAndReportErrorf(format string, args ...any) {
 	errorMessage := CreateErrorf(fmt.Sprintf(format, args...))
-	reportError(errorMessage)
+	ReportError(errorMessage)
 }
 
 func CreateScannerErrorf(line int, format string, args ...any) error {
@@ -31,10 +31,19 @@ func CreateScannerErrorf(line int, format string, args ...any) error {
 
 func CreateAndReportScannerErrorf(line int, format string, args ...any) {
 	errorMessage := CreateScannerErrorf(line, format, args...)
-	reportError(errorMessage)
+	ReportError(errorMessage)
 }
 
 func CreateAndReportParsingErrorf(format string, args ...any) {
 	errorMessage := fmt.Sprintf("Parsing: %s\n", fmt.Sprintf(format, args...))
-	reportError(errors.New(errorMessage))
+	ReportError(errors.New(errorMessage))
+}
+
+func CreateAndReportRuntimeErrorf(line int, format string, args ...any) {
+	errorMessage := CreateRuntimeErrorf(line, fmt.Sprintf("Runtime: %s", format), args...)
+	ReportError(errorMessage)
+}
+
+func CreateRuntimeErrorf(line int, format string, args ...any) error {
+	return errors.New(fmt.Sprintf("Runtime: Line: %d, %s", line, fmt.Sprintf(format, args...)))
 }
