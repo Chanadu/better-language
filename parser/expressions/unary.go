@@ -24,7 +24,7 @@ func (u *Unary) Evaluate() (any, error) {
 	switch u.Operator.Type {
 	case tokentype.Minus:
 		d, dOk := right.(float64)
-		i, iOk := right.(int)
+		i, iOk := right.(int64)
 
 		if !dOk && !iOk {
 			return nil, utils.CreateRuntimeErrorf(u.Operator.Line, "expect a number(double or int) after '-'")
@@ -46,7 +46,7 @@ func (u *Unary) Evaluate() (any, error) {
 		return !b, nil
 
 	case tokentype.BitwiseNOT:
-		i, ok := right.(int)
+		i, ok := right.(int64)
 		if !ok {
 			return nil, utils.CreateRuntimeErrorf(u.Operator.Line, "expect an integer after '~'")
 		}

@@ -239,7 +239,6 @@ func (sc *scanner) scanNumberToken() (tt tokentype.TokenType, literal any, e err
 			globals.HasErrors = true
 			return tokentype.Base, nil, err
 		}
-
 	} else {
 		var err error = nil
 		lit, err = strconv.ParseInt(sc.source[sc.start:sc.current], 10, 64)
@@ -260,9 +259,8 @@ func (sc *scanner) scanIdentifierToken() (tt tokentype.TokenType, e error) {
 	text := sc.source[sc.start:sc.current]
 
 	var ok bool
-	if tt, ok = tokentype.KeywordsToTokenType[text]; ok {
-		tt = tokentype.KeywordsToTokenType[text]
-	} else {
+	tt, ok = tokentype.KeywordsToTokenType[text]
+	if !ok {
 		tt = tokentype.Identifier
 	}
 

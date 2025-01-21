@@ -38,8 +38,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.Greater:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -61,8 +61,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.GreaterEqual:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -84,8 +84,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.Less:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -107,8 +107,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.LessEqual:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -172,8 +172,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.Minus:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -201,8 +201,8 @@ func (b *Binary) Evaluate() (any, error) {
 		}
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -224,8 +224,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.Star:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -247,8 +247,8 @@ func (b *Binary) Evaluate() (any, error) {
 	case tokentype.Slash:
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)
-		li, liOk := left.(int)
-		ri, riOk := right.(int)
+		li, liOk := left.(int64)
+		ri, riOk := right.(int64)
 
 		if !lfOk && !liOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Left Operand of (%s) must be numbers", b.Operator.Lexeme)
@@ -256,7 +256,9 @@ func (b *Binary) Evaluate() (any, error) {
 		if !rfOk && !riOk {
 			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be numbers", b.Operator.Lexeme)
 		}
-
+		if rf == 0 || ri == 0 {
+			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Division by zero")
+		}
 		if lfOk && rfOk {
 			return lf / rf, nil
 		}
@@ -278,9 +280,9 @@ func (b *Binary) Evaluate() (any, error) {
 	}
 }
 
-func integerBinaryExpression(operator scanner.Token, left any, right any) (l int, r int, err error) {
-	l, lOk := left.(int)
-	r, rOk := right.(int)
+func integerBinaryExpression(operator scanner.Token, left any, right any) (l int64, r int64, err error) {
+	l, lOk := left.(int64)
+	r, rOk := right.(int64)
 	if !lOk && !rOk {
 		return 0, 0, utils.CreateRuntimeErrorf(operator.Line, "Left and Right Operand of (%s) must be int", operator.Lexeme)
 	}
