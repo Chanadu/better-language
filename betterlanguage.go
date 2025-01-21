@@ -38,20 +38,23 @@ func FileReader(fileName string) {
 }
 
 func run(source string) {
-	tokens, done := runScanner(source)
-	if done {
+	tokens, ok := runScanner(source)
+	if !ok {
+		utils.ReportDebugf("Errors found in scanner, exiting")
 		os.Exit(1)
 	}
 	printTokens(tokens)
 
 	statement, ok := runParser(tokens)
-	if ok {
+	if !ok {
+		utils.ReportDebugf("Errors found in parsing, exiting")
 		os.Exit(1)
 	}
 	printExpressions(statement)
 
 	ok = parser.Interpret(statement)
 	if !ok {
+		utils.ReportDebugf("Errors found in interpretation, exiting")
 		os.Exit(1)
 	}
 }
@@ -71,18 +74,18 @@ func runScanner(source string) (tokens []scanner.Token, ok bool) {
 	return tokens, true
 }
 
-func runParser(tokens []scanner.Token) (statements expressions.Expression, done bool) {
+func runParser(tokens []scanner.Token) (statements expressions.Expression, ok bool) {
 	p := parser.NewParser(tokens)
 	statements, err := p.Parse()
 	if err != nil {
 		utils.CreateAndReportParsingErrorf("%s", err.Error())
-		return nil, true
+		return nil, false
 	}
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in parsing, exiting")
-		return nil, true
+		return nil, false
 	}
-	return statements, false
+	return statements, true
 }
 
 func printExpressions(statements expressions.Expression) {
