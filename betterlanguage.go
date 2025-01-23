@@ -11,6 +11,7 @@ import (
 	"Better-Language/globals"
 	"Better-Language/parser"
 	"Better-Language/parser/expressions"
+	"Better-Language/parser/statements"
 	"Better-Language/scanner"
 	"Better-Language/utils"
 )
@@ -42,7 +43,6 @@ func run(source string) {
 	tokens, ok := runScanner(source)
 	if !ok {
 		utils.ReportDebugf("Errors found in scanner, exiting")
-		// os.Exit(1)
 		return
 	}
 	printTokens(tokens)
@@ -50,15 +50,12 @@ func run(source string) {
 	statement, ok := runParser(tokens)
 	if !ok {
 		utils.ReportDebugf("Errors found in parsing, exiting")
-		// os.Exit(1)
 		return
 	}
-	printExpressions(statement)
 
 	ok = parser.Interpret(statement)
 	if !ok {
 		utils.ReportDebugf("Errors found in interpretation, exiting")
-		// os.Exit(1)
 		return
 	}
 }
@@ -78,18 +75,22 @@ func runScanner(source string) (tokens []scanner.Token, ok bool) {
 	return tokens, true
 }
 
-func runParser(tokens []scanner.Token) (statements expressions.Expression, ok bool) {
+func runParser(tokens []scanner.Token) (stmts []statements.Statement, ok bool) {
 	p := parser.NewParser(tokens)
-	statements, err := p.Parse()
+
+	stmts, err := p.Parse()
+
 	if err != nil {
 		utils.CreateAndReportParsingErrorf("%s", err.Error())
 		return nil, false
 	}
+
 	if globals.HasErrors {
 		utils.ReportDebugf("Errors found in parsing, exiting")
 		return nil, false
 	}
-	return statements, true
+
+	return stmts, true
 }
 
 func printExpressions(statements expressions.Expression) {

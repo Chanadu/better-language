@@ -1,19 +1,16 @@
 package parser
 
 import (
-	"Better-Language/parser/expressions"
-	"Better-Language/utils"
+	"Better-Language/parser/statements"
 )
 
-func Interpret(expression expressions.Expression) (ok bool) {
-	println(expression.ToGrammarString())
-
-	v, err := expression.Evaluate()
-	if err != nil {
-		utils.ReportError(err)
-		return false
+func Interpret(statements []statements.Statement) (ok bool) {
+	for _, statement := range statements {
+		err := statement.Run()
+		if err != nil {
+			return false
+		}
 	}
-	utils.ReportDebugf("Result: %v", v)
 
 	return true
 }
