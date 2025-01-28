@@ -2,12 +2,14 @@ package expressions
 
 import (
 	"fmt"
+
+	"Better-Language/parser/environment"
 )
 
 type Expression interface {
 	ToGrammarString() string
 	ToReversePolishNotation() string
-	Evaluate() (any, error)
+	Evaluate(env environment.Environment) (any, error)
 }
 
 func parenthesizeExpression(name string, expressions ...Expression) (parenthesizedName string) {

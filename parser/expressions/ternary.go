@@ -1,6 +1,7 @@
 package expressions
 
 import (
+	"Better-Language/parser/environment"
 	"Better-Language/utils"
 )
 
@@ -19,8 +20,8 @@ func (t Ternary) ToReversePolishNotation() string {
 	return reversePolishNotation("?", t.Condition, t.TrueBranch, t.FalseBranch)
 }
 
-func (t Ternary) Evaluate() (any, error) {
-	cond, err := t.Condition.Evaluate()
+func (t Ternary) Evaluate(env environment.Environment) (any, error) {
+	cond, err := t.Condition.Evaluate(env)
 	if err != nil {
 		return nil, err
 	}
@@ -33,8 +34,8 @@ func (t Ternary) Evaluate() (any, error) {
 	}
 	condBool := cond.(bool)
 	if condBool {
-		return t.TrueBranch.Evaluate()
+		return t.TrueBranch.Evaluate(env)
 	}
 
-	return t.FalseBranch.Evaluate()
+	return t.FalseBranch.Evaluate(env)
 }

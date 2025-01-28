@@ -16,7 +16,7 @@ func (p *parser) parseTernary() expressions.Expression {
 	condition := p.parseEquality()
 	if p.match(tokentype.QuestionMark) {
 		trueBranch := p.parseExpression()
-		if p.consume(tokentype.Colon, "expected ':' after ternary") {
+		if _, ok := p.consume(tokentype.Colon, "expected ':' after ternary"); ok {
 			falseBranch := p.parseExpression()
 			return &expressions.Ternary{
 				LineNumber:  p.previous().Line,
@@ -148,9 +148,15 @@ func (p *parser) parsePrimary() expressions.Expression {
 		}
 	}
 
+	if p.match(tokentype.Identifier) {
+		return &expressions.Variable{
+			Name: p.previous(),
+		}
+	}
+
 	if p.match(tokentype.OpeningParentheses) {
 		expression := p.parseExpression()
-		p.consume(tokentype.ClosingParentheses, "Expect ')' after expression.")
+		_, _ = p.consume(tokentype.ClosingParentheses, "Expect ')' after expression.")
 		return &expressions.Grouping{
 			InternalExpression: expression,
 		}

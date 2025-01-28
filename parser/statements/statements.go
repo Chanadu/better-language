@@ -1,5 +1,9 @@
 package statements
 
+import (
+	"Better-Language/parser/environment"
+)
+
 type Statement interface {
-	Run() error
+	Run(env environment.Environment) error
 }

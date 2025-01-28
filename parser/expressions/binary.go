@@ -1,6 +1,7 @@
 package expressions
 
 import (
+	"Better-Language/parser/environment"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
@@ -20,12 +21,12 @@ func (b *Binary) ToReversePolishNotation() string {
 	return reversePolishNotation(b.Operator.Lexeme, b.Left, b.Right)
 }
 
-func (b *Binary) Evaluate() (any, error) {
-	left, err := b.Left.Evaluate()
+func (b *Binary) Evaluate(env environment.Environment) (any, error) {
+	left, err := b.Left.Evaluate(env)
 	if err != nil {
 		return nil, err
 	}
-	right, err := b.Right.Evaluate()
+	right, err := b.Right.Evaluate(env)
 	if err != nil {
 		return nil, err
 	}

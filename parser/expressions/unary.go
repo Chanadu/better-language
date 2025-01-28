@@ -1,6 +1,7 @@
 package expressions
 
 import (
+	"Better-Language/parser/environment"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 	"Better-Language/utils"
@@ -19,8 +20,8 @@ func (u *Unary) ToReversePolishNotation() string {
 	return reversePolishNotation(u.Operator.Lexeme, u.Right)
 }
 
-func (u *Unary) Evaluate() (any, error) {
-	right, _ := u.Right.Evaluate()
+func (u *Unary) Evaluate(env environment.Environment) (any, error) {
+	right, _ := u.Right.Evaluate(env)
 	switch u.Operator.Type {
 	case tokentype.Minus:
 		d, dOk := right.(float64)

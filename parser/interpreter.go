@@ -1,13 +1,31 @@
 package parser
 
 import (
+	"Better-Language/parser/environment"
 	"Better-Language/parser/statements"
 	"Better-Language/utils"
 )
 
-func Interpret(statements []statements.Statement) (ok bool) {
+type Interpreter interface {
+	Interpret(statements []statements.Statement) (ok bool)
+}
+
+type interpreter struct {
+	environment environment.Environment
+}
+
+func NewInterpreter() Interpreter {
+	return &interpreter{
+		environment: environment.NewEnvironment(),
+	}
+}
+
+func (i *interpreter) Interpret(statements []statements.Statement) (ok bool) {
+	if len(statements) == 0 {
+		return false
+	}
 	for _, statement := range statements {
-		err := statement.Run()
+		err := statement.Run(i.environment)
 
 		if err != nil {
 			utils.ReportError(err)

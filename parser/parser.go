@@ -35,7 +35,8 @@ func (p *parser) Parse() ([]statements.Statement, error) {
 	var stmt []statements.Statement
 
 	for !p.isAtEnd() {
-		stmt = append(stmt, p.parseStatement())
+		st, _ := p.parseDeclaration()
+		stmt = append(stmt, st)
 	}
 
 	if p.err != nil {

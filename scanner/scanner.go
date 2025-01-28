@@ -39,6 +39,9 @@ func (sc *scanner) ScanTokens() ([]Token, error) {
 			sc.tokens = append(sc.tokens, *t)
 		}
 	}
+	if (len(sc.tokens) == 0) || (sc.tokens[len(sc.tokens)-1].Type != tokentype.Semicolon) {
+		sc.tokens = append(sc.tokens, Token{Type: tokentype.Semicolon, Lexeme: "", Literal: nil, Line: sc.lineNumber})
+	}
 	sc.tokens = append(sc.tokens, Token{Type: tokentype.EndOfFile, Lexeme: "", Literal: nil, Line: sc.lineNumber})
 
 	return sc.tokens, nil

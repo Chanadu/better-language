@@ -2,6 +2,8 @@ package expressions
 
 import (
 	"fmt"
+
+	"Better-Language/parser/environment"
 )
 
 type Literal struct {
@@ -22,6 +24,6 @@ func (l *Literal) ToReversePolishNotation() string {
 	return fmt.Sprint(l.Value)
 }
 
-func (l *Literal) Evaluate() (any, error) {
+func (l *Literal) Evaluate(env environment.Environment) (any, error) {
 	return l.Value, nil
 }

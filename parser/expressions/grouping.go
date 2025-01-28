@@ -1,5 +1,9 @@
 package expressions
 
+import (
+	"Better-Language/parser/environment"
+)
+
 type Grouping struct {
 	InternalExpression Expression
 }
@@ -12,6 +16,6 @@ func (g *Grouping) ToReversePolishNotation() string {
 	return g.InternalExpression.ToReversePolishNotation()
 }
 
-func (g *Grouping) Evaluate() (any, error) {
-	return g.InternalExpression.Evaluate()
+func (g *Grouping) Evaluate(env environment.Environment) (any, error) {
+	return g.InternalExpression.Evaluate(env)
 }

@@ -44,10 +44,10 @@ func (p *parser) match(tokenTypes ...tokentype.TokenType) bool {
 	return false
 }
 
-func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) (found bool) {
+func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) (t scanner.Token, ok bool) {
 	if p.check(tokenType) {
-		p.advance()
-		return true
+
+		return p.advance(), true
 	}
 
 	token := p.peek()
@@ -57,7 +57,7 @@ func (p *parser) consume(tokenType tokentype.TokenType, errorMessage string) (fo
 	}
 
 	p.err = fmt.Errorf("%v at %s: %s", token.Lexeme, location, errorMessage)
-	return false
+	return scanner.Token{}, false
 }
 
 func (p *parser) synchronize() {
