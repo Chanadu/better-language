@@ -10,7 +10,6 @@ import (
 
 	"Better-Language/globals"
 	"Better-Language/parser"
-	"Better-Language/parser/expressions"
 	"Better-Language/parser/statements"
 	"Better-Language/scanner"
 	"Better-Language/utils"
@@ -93,9 +92,9 @@ func runParser(tokens []scanner.Token) (stmts []statements.Statement, ok bool) {
 	return stmts, true
 }
 
-func printExpressions(statements expressions.Expression) {
-	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
-}
+// func printExpressions(statements expressions.Expression) {
+// 	utils.ReportDebugf("Parsed: %v", statements.ToGrammarString())
+// }
 
 //goland:noinspection GoUnusedFunction
 func printTokens(tokens []scanner.Token) {
