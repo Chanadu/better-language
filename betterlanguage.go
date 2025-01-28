@@ -55,7 +55,7 @@ func run(source string) {
 
 	ok = parser.Interpret(statement)
 	if !ok {
-		utils.ReportDebugf("Errors found in interpretation, exiting")
+		utils.ReportDebugf("Errors found in runtime, exiting")
 		return
 	}
 }
