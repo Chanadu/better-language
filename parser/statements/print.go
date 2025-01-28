@@ -16,9 +16,10 @@ type Print struct {
 func (p *Print) Run(env environment.Environment) (err error) {
 	v, err := p.Expression.Evaluate(env)
 	if err != nil {
-		return
+		return err
 	}
 
 	_, _ = fmt.Println(color.GreenString("%v", v))
-	return err
+
+	return nil
 }

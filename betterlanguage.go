@@ -105,9 +105,9 @@ func runParser(tokens []scanner.Token) (stmts []statements.Statement, ok bool) {
 //goland:noinspection GoUnusedFunction
 func printTokens(tokens []scanner.Token) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.Debug)
-	_, _ = fmt.Fprintln(w, color.CyanString("Type\tLexeme\tLiteral\tLine"))
+	_, _ = fmt.Fprintln(w, color.BlueString("Type\tLexeme\tLiteral\tLine"))
 	for _, t := range tokens {
-		_, _ = fmt.Fprintln(w, color.CyanString(fmt.Sprintf("%s\t%#v\t%#v\t%d", t.Type.String(), t.Lexeme, t.Literal, t.Line)))
+		_, _ = fmt.Fprintln(w, color.BlueString(fmt.Sprintf("%s\t%#v\t%#v\t%d", t.Type.String(), t.Lexeme, t.Literal, t.Line)))
 	}
 	if err := w.Flush(); err != nil {
 		utils.CreateAndReportErrorf("Error printing tokens: %e", err)
