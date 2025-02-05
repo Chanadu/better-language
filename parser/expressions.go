@@ -8,7 +8,27 @@ import (
 )
 
 func (p *parser) parseExpression() expressions.Expression {
-	return p.parseTernary()
+	return p.parseAssignment()
+}
+
+func (p *parser) parseAssignment() expressions.Expression {
+	expr := p.parseTernary()
+
+	if p.match(tokentype.Equal) {
+		equals := p.previous()
+		value := p.parseAssignment()
+
+		if variable, ok := expr.(*expressions.Variable); ok {
+			return &expressions.Assignment{
+				Name:  variable.Name,
+				Value: value,
+			}
+		}
+		p.err = fmt.Errorf("%s, invalid assignment target", equals.Lexeme)
+		return nil
+	}
+
+	return expr
 }
 
 // Ternary -> Equality ( "?" Expression ":" Expression )?

@@ -8,6 +8,7 @@ import (
 type Environment interface {
 	Define(name string, value any) (ok bool)
 	Get(name scanner.Token) (value any, ok bool)
+	Assign(name scanner.Token, value any) (ok bool)
 }
 
 type environment struct {
@@ -27,6 +28,17 @@ func (e *environment) Define(name string, value any) (ok bool) {
 		return false
 	}
 	e.values[name] = value
+	return true
+}
+
+func (e *environment) Assign(name scanner.Token, value any) (ok bool) {
+	_, found := e.values[name.Lexeme]
+	if !found {
+		utils.CreateAndReportParsingErrorf("Undefined variable '%s'", name.Lexeme)
+		return false
+	}
+
+	e.values[name.Lexeme] = value
 	return true
 }
 
