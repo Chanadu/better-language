@@ -11,13 +11,11 @@ type Assignment struct {
 }
 
 func (a Assignment) ToGrammarString() string {
-	// TODO implement me
-	panic("implement me")
+	return parenthesizeExpression("=", a.Value)
 }
 
 func (a Assignment) ToReversePolishNotation() string {
-	// TODO implement me
-	panic("implement me")
+	return reversePolishNotation("=", a.Value)
 }
 
 func (a Assignment) Evaluate(env environment.Environment) (any, error) {
