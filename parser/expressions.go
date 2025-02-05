@@ -54,7 +54,7 @@ type parseFunc func() expressions.Expression
 // LeftAssociativeBinary -> fn ( (tokens) fn )*
 func (p *parser) parseLeftAssociativeBinary(fn parseFunc, tokens []tokentype.TokenType) expressions.Expression {
 	left := fn()
-	if p.match(tokens...) {
+	for p.match(tokens...) {
 		operator := p.previous()
 		right := fn()
 
