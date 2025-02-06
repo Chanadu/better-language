@@ -19,6 +19,10 @@ func (p *Print) Run(env environment.Environment) (err error) {
 		return err
 	}
 
+	if v == nil {
+		_, _ = fmt.Println(color.GreenString("null"))
+		return nil
+	}
 	_, _ = fmt.Println(color.GreenString("%v", v))
 
 	return nil
