@@ -3,6 +3,7 @@ package expressions
 import (
 	"Better-Language/parser/environment"
 	"Better-Language/scanner"
+	"Better-Language/utils"
 )
 
 type Assignment struct {
@@ -24,6 +25,9 @@ func (a Assignment) Evaluate(env environment.Environment) (any, error) {
 		return nil, err
 	}
 
-	env.Assign(a.Name, val)
+	ok := env.Assign(a.Name, val)
+	if !ok {
+		return nil, utils.CreateRuntimeErrorf(a.Name.Line, "Undefined variable '%s'", a.Name.Lexeme)
+	}
 	return val, nil
 }

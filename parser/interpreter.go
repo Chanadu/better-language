@@ -16,7 +16,7 @@ type interpreter struct {
 
 func NewInterpreter() Interpreter {
 	return &interpreter{
-		environment: environment.NewEnvironment(),
+		environment: environment.NewEnvironment(nil),
 	}
 }
 

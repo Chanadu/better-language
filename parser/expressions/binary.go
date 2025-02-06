@@ -1,6 +1,8 @@
 package expressions
 
 import (
+	"fmt"
+
 	"Better-Language/parser/environment"
 	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
@@ -198,7 +200,10 @@ func (b *Binary) Evaluate(env environment.Environment) (any, error) {
 			if _, ok := right.(string); ok {
 				return left.(string) + right.(string), nil
 			}
-			return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be string", b.Operator.Lexeme)
+			rs := fmt.Sprintf("%#v", right)
+			return left.(string) + rs, nil
+
+			// return nil, utils.CreateRuntimeErrorf(b.Operator.Line, "Right Operand of (%s) must be string", b.Operator.Lexeme)
 		}
 		lf, lfOk := left.(float64)
 		rf, rfOk := right.(float64)

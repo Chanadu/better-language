@@ -182,6 +182,6 @@ func (p *parser) parsePrimary() expressions.Expression {
 		}
 	}
 
-	p.err = fmt.Errorf("expect expression, found '%s'", p.peek().Lexeme)
+	p.err = fmt.Errorf("expect expression, found '%s', line %d", p.peek().Lexeme, p.peek().Line)
 	return nil
 }

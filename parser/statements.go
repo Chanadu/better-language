@@ -36,6 +36,15 @@ func (p *parser) parseStatement() (s statements.Statement, ok bool) {
 	if p.match(tokentype.Print) {
 		return p.parsePrintStatement()
 	}
+	if p.match(tokentype.OpeningCurlyBrace) {
+		stmts, ok := p.parseBlock()
+		if !ok {
+			return nil, false
+		}
+		return statements.Block{
+			Statements: stmts,
+		}, true
+	}
 	return p.parseExpressionStatement()
 }
 
@@ -53,4 +62,24 @@ func (p *parser) parseExpressionStatement() (s statements.Statement, ok bool) {
 	return &statements.Expression{
 		Expression: expr,
 	}, ok
+}
+
+func (p *parser) parseBlock() (stmts []statements.Statement, ok bool) {
+	stmts = make([]statements.Statement, 0)
+
+	for !p.check(tokentype.ClosingCurlyBrace) && !p.isAtEnd() {
+		stmt, ok := p.parseDeclaration()
+		if !ok {
+			return nil, false
+		}
+		stmts = append(stmts, stmt)
+	}
+
+	_, ok = p.consume(tokentype.ClosingCurlyBrace, "Expect '}' after block.")
+	_, ok = p.consume(tokentype.Semicolon, "Expect ';' after block('}').")
+	if !ok {
+		return nil, false
+	}
+
+	return stmts, true
 }
