@@ -51,6 +51,10 @@ func (p *parser) parseStatement() (s statements.Statement, ok bool) {
 	if p.match(tokentype.If) {
 		return p.parseIfStatement()
 	}
+	if p.match(tokentype.While) {
+		return p.parseWhileStatement()
+	}
+
 	return p.parseExpressionStatement()
 }
 
@@ -119,4 +123,28 @@ func (p *parser) parseIfStatement() (s statements.Statement, ok bool) {
 		Then:      thenBranch,
 		Else:      elseBranch,
 	}, true
+}
+
+func (p *parser) parseWhileStatement() (s statements.Statement, ok bool) {
+	_, ok = p.consume(tokentype.OpeningParentheses, "Expect '(' after 'while'.")
+	if !ok {
+		return nil, false
+	}
+
+	expr := p.parseExpression()
+	_, ok = p.consume(tokentype.ClosingParentheses, "Expect ')' after while condition.")
+	if !ok {
+		return nil, false
+	}
+
+	stmt, ok := p.parseStatement()
+	if !ok {
+		return nil, false
+	}
+
+	return &statements.While{
+		Condition: expr,
+		Body:      stmt,
+	}, true
+
 }
