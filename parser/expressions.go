@@ -33,7 +33,7 @@ func (p *parser) parseAssignment() expressions.Expression {
 
 // Ternary -> Equality ( "?" Expression ":" Expression )?
 func (p *parser) parseTernary() expressions.Expression {
-	condition := p.parseEquality()
+	condition := p.parseOr()
 	if p.match(tokentype.QuestionMark) {
 		trueBranch := p.parseExpression()
 		if _, ok := p.consume(tokentype.Colon, "expected ':' after ternary"); ok {
@@ -47,6 +47,35 @@ func (p *parser) parseTernary() expressions.Expression {
 		}
 	}
 	return condition
+}
+
+func (p *parser) parseOr() expressions.Expression {
+	expr := p.parseAnd()
+	for p.match(tokentype.Or) {
+		operator := p.previous()
+		right := p.parseAnd()
+		expr = &expressions.Logical{
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
+		}
+	}
+	return expr
+}
+
+func (p *parser) parseAnd() expressions.Expression {
+	expr := p.parseEquality()
+
+	for p.match(tokentype.And) {
+		operator := p.previous()
+		right := p.parseEquality()
+		expr = &expressions.Logical{
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
+		}
+	}
+	return expr
 }
 
 type parseFunc func() expressions.Expression
