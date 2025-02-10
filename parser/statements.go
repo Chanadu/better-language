@@ -68,7 +68,7 @@ func (p *parser) parsePrintStatement() (s statements.Statement, ok bool) {
 
 func (p *parser) parseExpressionStatement() (s statements.Statement, ok bool) {
 	expr := p.parseExpression()
-	// _, ok = p.consume(tokentype.Semicolon, "Expect ';' after expression.")
+	_, ok = p.consume(tokentype.Semicolon, "Expect ';' after expression.")
 	return &statements.Expression{
 		Expression: expr,
 	}, ok
