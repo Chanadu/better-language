@@ -171,7 +171,43 @@ func (p *parser) parseUnary() expressions.Expression {
 			Right:    right,
 		}
 	}
-	return p.parsePrimary()
+	return p.parseCall()
+}
+
+func (p *parser) parseCall() expressions.Expression {
+	expr := p.parsePrimary()
+
+	for {
+		if p.match(tokentype.OpeningParentheses) {
+			expr = p.finishCall(expr)
+		} else {
+			break
+		}
+	}
+
+	return expr
+}
+
+func (p *parser) finishCall(callee expressions.Expression) expressions.Expression {
+	var args []expressions.Expression
+	if !p.check(tokentype.ClosingParentheses) {
+		for {
+			if len(args) >= 255 {
+				p.err = fmt.Errorf("cannot have more than 255 arguments")
+			}
+			args = append(args, p.parseExpression())
+			if !p.match(tokentype.Comma) {
+				break
+			}
+		}
+	}
+
+	tt, _ := p.consume(tokentype.ClosingParentheses, "Expect ')' after arguments.")
+	return &expressions.Call{
+		Callee: callee,
+		Para:   tt,
+		Args:   args,
+	}
 }
 
 // Primary -> Integer | Double | String | True | False | "(" Expression ")" | Null;
