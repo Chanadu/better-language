@@ -54,6 +54,9 @@ func (p *parser) parseStatement() (s statements.Statement, ok bool) {
 	if p.match(tokentype.While) {
 		return p.parseWhileStatement()
 	}
+	if p.match(tokentype.For) {
+		return p.parseForStatement()
+	}
 
 	return p.parseExpressionStatement()
 }
@@ -68,7 +71,7 @@ func (p *parser) parsePrintStatement() (s statements.Statement, ok bool) {
 
 func (p *parser) parseExpressionStatement() (s statements.Statement, ok bool) {
 	expr := p.parseExpression()
-	// _, ok = p.consume(tokentype.Semicolon, "Expect ';' after expression.")
+	_, ok = p.consume(tokentype.Semicolon, "Expect ';' after expression.")
 	return &statements.Expression{
 		Expression: expr,
 	}, ok
@@ -147,4 +150,68 @@ func (p *parser) parseWhileStatement() (s statements.Statement, ok bool) {
 		Body:      stmt,
 	}, true
 
+}
+
+func (p *parser) parseForStatement() (s statements.Statement, ok bool) {
+	p.consume(tokentype.OpeningParentheses, "Expect '(' after 'for'.")
+
+	var initializer statements.Statement = nil
+	if !p.match(tokentype.Semicolon) {
+		if p.match(tokentype.Var) {
+			initializer, ok = p.parseVarDeclaration()
+			if !ok {
+				return nil, false
+			}
+		} else {
+			initializer, ok = p.parseExpressionStatement()
+			if !ok {
+				return nil, false
+			}
+		}
+	}
+
+	var condition expressions.Expression = nil
+	if !p.check(tokentype.Semicolon) {
+		condition = p.parseExpression()
+	}
+
+	p.consume(tokentype.Semicolon, "Expect ';' after loop condition.")
+
+	var increment expressions.Expression = nil
+	if !p.check(tokentype.ClosingParentheses) {
+		increment = p.parseExpression()
+	}
+	p.consume(tokentype.ClosingParentheses, "Expect ')' after for clauses.")
+
+	body, ok := p.parseStatement()
+	if !ok {
+		return nil, false
+	}
+
+	if increment != nil {
+		body = &statements.Block{
+			Statements: []statements.Statement{
+				body,
+				&statements.Expression{Expression: increment},
+			},
+		}
+	}
+	if condition == nil {
+		condition = &expressions.Literal{Value: true}
+	}
+	body = &statements.While{
+		Condition: condition,
+		Body:      body,
+	}
+
+	if initializer != nil {
+		body = &statements.Block{
+			Statements: []statements.Statement{
+				initializer,
+				body,
+			},
+		}
+	}
+
+	return body, true
 }

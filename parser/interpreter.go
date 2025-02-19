@@ -11,12 +11,18 @@ type Interpreter interface {
 }
 
 type interpreter struct {
+	globals     environment.Environment
 	environment environment.Environment
 }
 
 func NewInterpreter() Interpreter {
+	globals := environment.NewEnvironment(nil)
+
+	
+
 	return &interpreter{
-		environment: environment.NewEnvironment(nil),
+		globals:     globals,
+		environment: globals,
 	}
 }
 
