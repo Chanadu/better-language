@@ -1,9 +1,10 @@
 package statements
 
 import (
+	"errors"
+
 	"Better-Language/parser/environment"
 	"Better-Language/parser/expressions"
-	"errors"
 )
 
 type If struct {

@@ -1,9 +1,11 @@
 package expressions
 
 import (
-	"Better-Language/parser/environment"
-	"Better-Language/scanner"
 	"fmt"
+
+	"Better-Language/parser/environment"
+	"Better-Language/parser/function"
+	"Better-Language/scanner"
 )
 
 type Call struct {
@@ -11,7 +13,6 @@ type Call struct {
 	Para   scanner.Token
 	Args   []Expression
 }
-
 
 func (c *Call) ToGrammarString() string {
 	return parenthesizeExpression(c.Para.Lexeme, c.Args...)
@@ -37,10 +38,10 @@ func (c *Call) Evaluate(env environment.Environment) (any, error) {
 		}
 		args = append(args, value)
 	}
-	var function Callable
+	var function function.Callable
 	var ok bool
 
-	if function, ok = callee.(Callable); !ok {
+	if function, ok = callee.(function.Callable); !ok {
 		return nil, fmt.Errorf("can only call functions and classes, %v", c.Para)
 	}
 

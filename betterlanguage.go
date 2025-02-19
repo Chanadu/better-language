@@ -10,6 +10,7 @@ import (
 
 	"Better-Language/globals"
 	"Better-Language/parser"
+	"Better-Language/parser/interpreter"
 	"Better-Language/parser/statements"
 	"Better-Language/scanner"
 	"Better-Language/utils"
@@ -54,7 +55,7 @@ func run(source string) {
 	}
 	utils.ReportDebugf("Parser completed successfully")
 
-	interpreter := parser.NewInterpreter()
+	interpreter := interpreter.NewInterpreter()
 	ok = interpreter.Interpret(statement)
 	if !ok {
 		utils.ReportDebugf("Errors found in runtime, exiting")

@@ -3,12 +3,15 @@ package parser
 import (
 	"Better-Language/parser/expressions"
 	"Better-Language/parser/statements"
+	"Better-Language/scanner"
 	"Better-Language/scanner/tokentype"
 )
 
 func (p *parser) parseDeclaration() (s statements.Statement, ok bool) {
 	if p.match(tokentype.Var) {
 		s, ok = p.parseVarDeclaration()
+	} else if p.match(tokentype.Function) {
+		s, ok = p.parseFunction("function")
 	} else {
 		s, ok = p.parseStatement()
 	}
@@ -214,4 +217,51 @@ func (p *parser) parseForStatement() (s statements.Statement, ok bool) {
 	}
 
 	return body, true
+}
+
+func (p *parser) parseFunction(functionKind string) (s statements.Statement, ok bool) {
+
+	name, ok := p.consume(tokentype.Identifier, "Expect "+functionKind+" name.")
+	if !ok {
+		return nil, false
+	}
+
+	_, ok = p.consume(tokentype.OpeningParentheses, "Expect '(' after "+functionKind+" name.")
+	if !ok {
+		return nil, false
+	}
+
+	var params []scanner.Token
+	if !p.check(tokentype.ClosingParentheses) {
+		for {
+			param, ok := p.consume(tokentype.Identifier, "Expect parameter name.")
+			if !ok {
+				return nil, false
+			}
+			params = append(params, param)
+			if !p.match(tokentype.Comma) {
+				break
+			}
+		}
+	}
+
+	_, ok = p.consume(tokentype.ClosingParentheses, "Expect ')' after parameters.")
+	if !ok {
+		return nil, false
+	}
+
+	_, ok = p.consume(tokentype.OpeningCurlyBrace, "Expect '{' before "+functionKind+" body.")
+	if !ok {
+		return nil, false
+	}
+
+	body, ok := p.parseBlock()
+	if !ok {
+		return nil, false
+	}
+	return &statements.Function{
+		Name:   name,
+		Params: params,
+		Body:   body,
+	}, true
 }

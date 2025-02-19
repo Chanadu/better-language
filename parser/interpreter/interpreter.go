@@ -1,6 +1,7 @@
-package parser
+package interpreter
 
 import (
+	"Better-Language/parser/builtin"
 	"Better-Language/parser/environment"
 	"Better-Language/parser/statements"
 	"Better-Language/utils"
@@ -18,7 +19,7 @@ type interpreter struct {
 func NewInterpreter() Interpreter {
 	globals := environment.NewEnvironment(nil)
 
-	
+	globals.Define("clock", builtin.Clock{})
 
 	return &interpreter{
 		globals:     globals,
