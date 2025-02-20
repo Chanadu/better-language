@@ -205,7 +205,7 @@ func (p *parser) finishCall(callee expressions.Expression) expressions.Expressio
 	tt, _ := p.consume(tokentype.ClosingParentheses, "Expect ')' after arguments.")
 	return &expressions.Call{
 		Callee: callee,
-		Para:   tt,
+		Paren:  tt,
 		Args:   args,
 	}
 }

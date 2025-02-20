@@ -19,7 +19,7 @@ type interpreter struct {
 func NewInterpreter() Interpreter {
 	globals := environment.NewEnvironment(nil)
 
-	globals.Define("clock", callable.Clock{})
+	globals.Define("clock", &callable.Clock{})
 
 	return &interpreter{
 		globals:     globals,

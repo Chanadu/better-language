@@ -10,16 +10,16 @@ import (
 
 type Call struct {
 	Callee Expression
-	Para   scanner.Token
+	Paren  scanner.Token
 	Args   []Expression
 }
 
 func (c *Call) ToGrammarString() string {
-	return parenthesizeExpression(c.Para.Lexeme, c.Args...)
+	return parenthesizeExpression(c.Paren.Lexeme, c.Args...)
 }
 
 func (c *Call) ToReversePolishNotation() string {
-	return reversePolishNotation(c.Para.Lexeme, c.Args...)
+	return reversePolishNotation(c.Paren.Lexeme, c.Args...)
 }
 
 func (c *Call) Evaluate(env environment.Environment) (any, error) {
@@ -32,7 +32,7 @@ func (c *Call) Evaluate(env environment.Environment) (any, error) {
 	var ok bool
 
 	if f, ok = callee.(callable.Callable); !ok {
-		return nil, fmt.Errorf("can only call functions and classes, %v", c.Para)
+		return nil, fmt.Errorf("can only call functions and classes, %v", c.Callee)
 	}
 
 	var args []any

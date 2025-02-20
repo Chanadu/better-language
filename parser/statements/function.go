@@ -44,9 +44,9 @@ type Function struct {
 }
 
 func (f *Function) Run(env environment.Environment) error {
-	_ = &CallableFunction{Declaration: f}
+	cf := &CallableFunction{Declaration: f}
 
-	ok := env.Define(f.Name.Lexeme, &CallableFunction{Declaration: f})
+	ok := env.Define(f.Name.Lexeme, cf)
 	if !ok {
 		return utils.CreateRuntimeErrorf(f.Name.Line, "function %s already defined", f.Name.Lexeme)
 	}
