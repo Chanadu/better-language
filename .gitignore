@@ -57,6 +57,7 @@ go.work.sum
 # Build Files
 build/*
 Better-Language
+gbpl
 
 # Graph File
 godepgraph.png

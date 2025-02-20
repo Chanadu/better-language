@@ -43,7 +43,7 @@ func run(source string) {
 	tokens, ok := runScanner(source)
 	if !ok {
 		utils.ReportDebugf("Errors found in scanner, exiting")
-		return
+		os.Exit(1)
 	}
 	// printTokens(tokens)
 	// utils.ReportDebugf("Scanner completed successfully")
@@ -51,7 +51,7 @@ func run(source string) {
 	statement, ok := runParser(tokens)
 	if !ok {
 		utils.ReportDebugf("Errors found in parsing, exiting")
-		return
+		os.Exit(1)
 	}
 	// utils.ReportDebugf("Parser completed successfully")
 
@@ -59,7 +59,7 @@ func run(source string) {
 	ok = ip.Interpret(statement)
 	if !ok {
 		utils.ReportDebugf("Errors found in runtime, exiting")
-		return
+		os.Exit(1)
 	}
 	// utils.ReportDebugf("Runtime completed successfully")
 }
