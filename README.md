@@ -1,7 +1,7 @@
 # <a href="#better-language">Better-Language</a>
 
 ## <a href="#description">Description</a>
-This is a project that creates a new programming language by creating a tree-walking interpreter. 
+A new programming language by creating through a built from scratch tree-walking interpreter, written in Go. 
 
 ## <a href="#how-to-run">How To Run</a>
 1. Clone the repository
