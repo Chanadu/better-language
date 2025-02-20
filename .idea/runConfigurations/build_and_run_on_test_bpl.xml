@@ -5,7 +5,7 @@
     <go_parameters value="-o build/betterlanguage" />
     <parameters value="test.bpl" />
     <kind value="PACKAGE" />
-    <package value="Better-Language" />
+    <package value="github.com/Chanadu/better-language" />
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$" />
     <output_directory value="$PROJECT_DIR$/build" />

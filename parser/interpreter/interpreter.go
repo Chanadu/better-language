@@ -1,7 +1,7 @@
 package interpreter
 
 import (
-	"github.com/Chanadu/better-language/parser/builtin"
+	"github.com/Chanadu/better-language/parser/callable"
 	"github.com/Chanadu/better-language/parser/environment"
 	"github.com/Chanadu/better-language/parser/statements"
 	"github.com/Chanadu/better-language/utils"
@@ -19,7 +19,7 @@ type interpreter struct {
 func NewInterpreter() Interpreter {
 	globals := environment.NewEnvironment(nil)
 
-	globals.Define("clock", builtin.Clock{})
+	globals.Define("clock", callable.Clock{})
 
 	return &interpreter{
 		globals:     globals,

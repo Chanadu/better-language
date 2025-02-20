@@ -3,8 +3,8 @@ package expressions
 import (
 	"fmt"
 
+	"github.com/Chanadu/better-language/parser/callable"
 	"github.com/Chanadu/better-language/parser/environment"
-	"github.com/Chanadu/better-language/parser/function"
 	"github.com/Chanadu/better-language/scanner"
 )
 
@@ -23,11 +23,16 @@ func (c *Call) ToReversePolishNotation() string {
 }
 
 func (c *Call) Evaluate(env environment.Environment) (any, error) {
-	// panic("implement me")
-
 	callee, err := c.Callee.Evaluate(env)
 	if err != nil {
 		return nil, err
+	}
+
+	var f callable.Callable
+	var ok bool
+
+	if f, ok = callee.(callable.Callable); !ok {
+		return nil, fmt.Errorf("can only call functions and classes, %v", c.Para)
 	}
 
 	var args []any
@@ -38,16 +43,19 @@ func (c *Call) Evaluate(env environment.Environment) (any, error) {
 		}
 		args = append(args, value)
 	}
-	var function function.Callable
-	var ok bool
 
-	if function, ok = callee.(function.Callable); !ok {
-		return nil, fmt.Errorf("can only call functions and classes, %v", c.Para)
+	if len(args) != f.Arity() {
+		return nil, fmt.Errorf("expected %d arguments but got %d", f.Arity(), len(args))
+	}
+	var returnVal any
+	err = f.Call(env, args, &returnVal)
+	if err != nil {
+		return nil, err
 	}
 
-	if len(args) != function.Arity() {
-		return nil, fmt.Errorf("expected %d arguments but got %d", function.Arity(), len(args))
+	if returnVal == nil {
+		return nil, nil
 	}
 
-	return function.Call(env, args)
+	return returnVal, nil
 }

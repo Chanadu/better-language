@@ -11,7 +11,7 @@ func (p *parser) parseDeclaration() (s statements.Statement, ok bool) {
 	if p.match(tokentype.Var) {
 		s, ok = p.parseVarDeclaration()
 	} else if p.match(tokentype.Function) {
-		s, ok = p.parseFunction("function")
+		s, ok = p.parseFunction("callable")
 	} else {
 		s, ok = p.parseStatement()
 	}
@@ -39,9 +39,6 @@ func (p *parser) parseVarDeclaration() (s statements.Statement, ok bool) {
 }
 
 func (p *parser) parseStatement() (s statements.Statement, ok bool) {
-	if p.match(tokentype.Print) {
-		return p.parsePrintStatement()
-	}
 	if p.match(tokentype.OpeningCurlyBrace) {
 		stmts, ok := p.parseBlock()
 		if !ok {
@@ -51,6 +48,9 @@ func (p *parser) parseStatement() (s statements.Statement, ok bool) {
 			Statements: stmts,
 		}, true
 	}
+	if p.match(tokentype.Print) {
+		return p.parsePrintStatement()
+	}
 	if p.match(tokentype.If) {
 		return p.parseIfStatement()
 	}
@@ -59,6 +59,9 @@ func (p *parser) parseStatement() (s statements.Statement, ok bool) {
 	}
 	if p.match(tokentype.For) {
 		return p.parseForStatement()
+	}
+	if p.match(tokentype.Return) {
+		return p.parseReturnStatement()
 	}
 
 	return p.parseExpressionStatement()
@@ -264,4 +267,22 @@ func (p *parser) parseFunction(functionKind string) (s statements.Statement, ok 
 		Params: params,
 		Body:   body,
 	}, true
+}
+
+func (p *parser) parseReturnStatement() (s statements.Statement, ok bool) {
+	keyword := p.previous()
+	var value expressions.Expression = nil
+	if !p.check(tokentype.Semicolon) {
+		value = p.parseExpression()
+	}
+	_, ok = p.consume(tokentype.Semicolon, "Expect ';' after return value.")
+	if !ok {
+		return nil, false
+	}
+
+	return &statements.Return{
+		Keyword: keyword,
+		Value:   value,
+	}, true
+
 }

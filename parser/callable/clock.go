@@ -1,4 +1,4 @@
-package builtin
+package callable
 
 import (
 	"time"
@@ -17,5 +17,5 @@ func (c *Clock) Call(env environment.Environment, args []any) (any, error) {
 }
 
 func (c *Clock) String() string {
-	return "<clock native function>"
+	return "<clock native callable>"
 }
