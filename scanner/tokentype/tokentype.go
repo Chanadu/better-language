@@ -76,7 +76,6 @@ const (
 
 	EndOfFile
 
-	// Ternary
 	QuestionMark
 	Colon
 

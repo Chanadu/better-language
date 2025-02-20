@@ -12,7 +12,7 @@ func (c *Clock) Arity() int {
 	return 0
 }
 
-func (c *Clock) Call(env environment.Environment, args []any) (any, error) {
+func (c *Clock) Call(environment.Environment, []any) (any, error) {
 	return time.Now().UnixMilli(), nil
 }
 

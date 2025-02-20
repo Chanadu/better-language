@@ -40,6 +40,8 @@ func (l *Logical) Evaluate(env environment.Environment) (any, error) {
 		if !lb {
 			return false, nil
 		}
+	default:
+		panic("unhandled default case")
 	}
 
 	return l.Right.Evaluate(env)

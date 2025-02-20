@@ -2,6 +2,7 @@ package statements
 
 import (
 	"errors"
+
 	"github.com/Chanadu/better-language/parser/environment"
 	"github.com/Chanadu/better-language/parser/expressions"
 )

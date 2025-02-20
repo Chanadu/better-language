@@ -39,10 +39,10 @@ func CreateAndReportParsingErrorf(format string, args ...any) {
 	ReportError(errors.New(errorMessage))
 }
 
-func CreateAndReportRuntimeErrorf(line int, format string, args ...any) {
-	errorMessage := CreateRuntimeErrorf(line, fmt.Sprintf("Runtime: %s", format), args...)
-	ReportError(errorMessage)
-}
+// func CreateAndReportRuntimeErrorf(line int, format string, args ...any) {
+// 	errorMessage := CreateRuntimeErrorf(line, fmt.Sprintf("Runtime: %s", format), args...)
+// 	ReportError(errorMessage)
+// }
 
 func CreateRuntimeErrorf(line int, format string, args ...any) error {
 	return errors.New(fmt.Sprintf("Runtime: Line: %d, %s", line, fmt.Sprintf(format, args...)))

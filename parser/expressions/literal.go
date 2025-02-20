@@ -24,6 +24,6 @@ func (l *Literal) ToReversePolishNotation() string {
 	return fmt.Sprint(l.Value)
 }
 
-func (l *Literal) Evaluate(env environment.Environment) (any, error) {
+func (l *Literal) Evaluate(environment.Environment) (any, error) {
 	return l.Value, nil
 }

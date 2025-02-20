@@ -55,8 +55,8 @@ func run(source string) {
 	}
 	utils.ReportDebugf("Parser completed successfully")
 
-	interpreter := interpreter.NewInterpreter()
-	ok = interpreter.Interpret(statement)
+	ip := interpreter.NewInterpreter()
+	ok = ip.Interpret(statement)
 	if !ok {
 		utils.ReportDebugf("Errors found in runtime, exiting")
 		return
