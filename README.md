@@ -5,20 +5,19 @@ This is a project that creates a new programming language by creating a tree-wal
 
 ## <a href="#how-to-run">How To Run</a>
 1. Clone the repository
-3. Open the terminal and navigate to the directory where the repository is located
-4. Run the following command in the terminal to build to :
+2. Open the terminal and navigate to the directory where the repository is located
+3. Run the following command in the terminal to build to:
 ``` bash
 go build -o gbpl . 
 ```
-3. Create a .bpl file to write code in and run the following command in the terminal:
+4. Create a .bpl file to write code in and run the following command in the terminal:
 ``` bash
 ./gbpl <filename>.bpl
 ```
-or 
+or run this for a very limited REPL environment:
 ``` bash
 ./gbpl
 ```
-for a very limited REPL environment.
 
 ## <a href="#why">Why</a>
 I created this project to learn more about how programming languages are created and how interpreters work. This was a personal project not connected to any other organization or activity.
