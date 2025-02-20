@@ -3,8 +3,8 @@ package parser
 import (
 	"fmt"
 
-	"Better-Language/parser/expressions"
-	"Better-Language/scanner/tokentype"
+	"github.com/Chanadu/better-language/parser/expressions"
+	"github.com/Chanadu/better-language/scanner/tokentype"
 )
 
 func (p *parser) parseExpression() expressions.Expression {

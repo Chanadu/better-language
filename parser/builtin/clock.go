@@ -3,7 +3,7 @@ package builtin
 import (
 	"time"
 
-	"Better-Language/parser/environment"
+	"github.com/Chanadu/better-language/parser/environment"
 )
 
 type Clock struct{}

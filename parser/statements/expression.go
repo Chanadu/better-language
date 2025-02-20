@@ -1,8 +1,8 @@
 package statements
 
 import (
-	"Better-Language/parser/environment"
-	"Better-Language/parser/expressions"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/expressions"
 )
 
 type Expression struct {

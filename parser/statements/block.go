@@ -1,7 +1,7 @@
 package statements
 
 import (
-	"Better-Language/parser/environment"
+	"github.com/Chanadu/better-language/parser/environment"
 )
 
 type Block struct {

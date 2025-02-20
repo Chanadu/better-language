@@ -1,8 +1,8 @@
 package interpreter
 
 import (
-	"Better-Language/parser/environment"
-	"Better-Language/parser/statements"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/statements"
 )
 
 type Function struct {

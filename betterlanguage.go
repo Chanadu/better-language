@@ -8,12 +8,12 @@ import (
 
 	"github.com/fatih/color"
 
-	"Better-Language/globals"
-	"Better-Language/parser"
-	"Better-Language/parser/interpreter"
-	"Better-Language/parser/statements"
-	"Better-Language/scanner"
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/globals"
+	"github.com/Chanadu/better-language/parser"
+	"github.com/Chanadu/better-language/parser/interpreter"
+	"github.com/Chanadu/better-language/parser/statements"
+	"github.com/Chanadu/better-language/scanner"
+	"github.com/Chanadu/better-language/utils"
 )
 
 func LineReader() {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"Better-Language/scanner"
-	"Better-Language/scanner/tokentype"
+	"github.com/Chanadu/better-language/scanner"
+	"github.com/Chanadu/better-language/scanner/tokentype"
 )
 
 func (p *parser) peek() scanner.Token {

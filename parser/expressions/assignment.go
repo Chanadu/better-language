@@ -1,9 +1,9 @@
 package expressions
 
 import (
-	"Better-Language/parser/environment"
-	"Better-Language/scanner"
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/scanner"
+	"github.com/Chanadu/better-language/utils"
 )
 
 type Assignment struct {

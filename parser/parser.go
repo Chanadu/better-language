@@ -3,9 +3,9 @@ package parser
 import (
 	"errors"
 
-	"Better-Language/globals"
-	"Better-Language/parser/statements"
-	"Better-Language/scanner"
+	"github.com/Chanadu/better-language/globals"
+	"github.com/Chanadu/better-language/parser/statements"
+	"github.com/Chanadu/better-language/scanner"
 )
 
 type Parser interface {

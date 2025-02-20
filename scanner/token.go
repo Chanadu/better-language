@@ -1,7 +1,7 @@
 package scanner
 
 import (
-	"Better-Language/scanner/tokentype"
+	"github.com/Chanadu/better-language/scanner/tokentype"
 )
 
 type Token struct {

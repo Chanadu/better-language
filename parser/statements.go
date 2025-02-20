@@ -1,10 +1,10 @@
 package parser
 
 import (
-	"Better-Language/parser/expressions"
-	"Better-Language/parser/statements"
-	"Better-Language/scanner"
-	"Better-Language/scanner/tokentype"
+	"github.com/Chanadu/better-language/parser/expressions"
+	"github.com/Chanadu/better-language/parser/statements"
+	"github.com/Chanadu/better-language/scanner"
+	"github.com/Chanadu/better-language/scanner/tokentype"
 )
 
 func (p *parser) parseDeclaration() (s statements.Statement, ok bool) {

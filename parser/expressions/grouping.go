@@ -1,7 +1,7 @@
 package expressions
 
 import (
-	"Better-Language/parser/environment"
+	"github.com/Chanadu/better-language/parser/environment"
 )
 
 type Grouping struct {

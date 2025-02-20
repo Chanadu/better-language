@@ -1,9 +1,9 @@
 package statements
 
 import (
-	"Better-Language/parser/environment"
-	"Better-Language/parser/expressions"
-	"Better-Language/scanner"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/expressions"
+	"github.com/Chanadu/better-language/scanner"
 )
 
 type Var struct {

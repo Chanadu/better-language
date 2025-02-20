@@ -3,7 +3,7 @@ package expressions
 import (
 	"fmt"
 
-	"Better-Language/parser/environment"
+	"github.com/Chanadu/better-language/parser/environment"
 )
 
 type Expression interface {

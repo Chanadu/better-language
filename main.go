@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/utils"
 )
 
 func main() {

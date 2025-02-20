@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strconv"
 
-	"Better-Language/globals"
-	"Better-Language/scanner/tokentype"
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/globals"
+	"github.com/Chanadu/better-language/scanner/tokentype"
+	"github.com/Chanadu/better-language/utils"
 )
 
 type Scanner interface {

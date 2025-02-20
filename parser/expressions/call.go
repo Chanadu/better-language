@@ -3,9 +3,9 @@ package expressions
 import (
 	"fmt"
 
-	"Better-Language/parser/environment"
-	"Better-Language/parser/function"
-	"Better-Language/scanner"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/function"
+	"github.com/Chanadu/better-language/scanner"
 )
 
 type Call struct {

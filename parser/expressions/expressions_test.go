@@ -3,9 +3,9 @@ package expressions
 import (
 	"testing"
 
-	"Better-Language/scanner"
-	"Better-Language/scanner/tokentype"
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/scanner"
+	"github.com/Chanadu/better-language/scanner/tokentype"
+	"github.com/Chanadu/better-language/utils"
 )
 
 func TestGrammarExpression(t *testing.T) {

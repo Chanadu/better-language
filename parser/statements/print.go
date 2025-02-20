@@ -5,8 +5,8 @@ import (
 
 	"github.com/fatih/color"
 
-	"Better-Language/parser/environment"
-	"Better-Language/parser/expressions"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/expressions"
 )
 
 type Print struct {

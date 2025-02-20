@@ -1,7 +1,7 @@
 package function
 
 import (
-	"Better-Language/parser/interpreter"
+	"github.com/Chanadu/better-language/parser/interpreter"
 )
 
 type Callable interface {

@@ -1,10 +1,10 @@
 package interpreter
 
 import (
-	"Better-Language/parser/builtin"
-	"Better-Language/parser/environment"
-	"Better-Language/parser/statements"
-	"Better-Language/utils"
+	"github.com/Chanadu/better-language/parser/builtin"
+	"github.com/Chanadu/better-language/parser/environment"
+	"github.com/Chanadu/better-language/parser/statements"
+	"github.com/Chanadu/better-language/utils"
 )
 
 type Interpreter interface {
